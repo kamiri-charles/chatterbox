@@ -1,6 +1,18 @@
-#App {
+.App {
   width: 100vw;
   height: 100vh;
-  background: black;
+  background: #8E2DE2;
+  background: -webkit-linear-gradient(to right, #4A00E0, #8E2DE2); 
+  background: linear-gradient(to right, #4A00E0, #8E2DE2); 
   font-family: "Roboto", sans-serif;
+  color: white;
+}
+
+.chat {
+  width: 100vw;
+  position: fixed;
+  top: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 }
