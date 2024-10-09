@@ -7,7 +7,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="test" element={ <Header /> } />
+        <Route path="/" element={ <Header /> } />
       </Routes>
     </Router>
   )

@@ -1,0 +1,14 @@
+.header {
+    width: 100vw;
+    padding: 20px;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .brand-logo {
+        font-family: "Edu AU VIC WA NT Guides", cursive;
+        font-size: 30px;
+        font-weight: 600;
+    }
+}
