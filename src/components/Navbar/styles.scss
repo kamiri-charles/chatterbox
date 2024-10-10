@@ -1,7 +1,55 @@
 .navbar {
     display: flex;
+    flex-direction: column;
     width: 300px;
-    height: 90vh;
+    height: 80vh;
     background: white;
+    color: black;
     border-radius: 10px;
+    padding: 20px;
+    
+    .nav-title {
+        position: relative;
+        font-size: 22px;
+        padding-inline: 10px;
+        border-bottom: 1px solid black;
+        margin-block: 10px;
+
+        .users-count {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+
+            .online {
+                margin-inline: 10px;
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background: #3cfd0b;
+                
+            }
+        }
+    }
+    
+    .users-wrapper {
+
+        .user {
+            display: flex;
+            padding: 20px 10px;
+            border-radius: 3px;
+            background: #8f8f8f;
+            margin: 10px 0;
+            cursor: pointer;
+
+            .profile-pic {
+                font-size: 24px;
+                margin-inline: 10px;
+            }
+        }
+    }
 }

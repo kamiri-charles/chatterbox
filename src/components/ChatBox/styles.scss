@@ -1,7 +1,38 @@
 .chat-box {
     display: flex;
+    flex-direction: column;
     width: 900px;
-    height: 90vh;
-    background: white;
+    height: 80vh;
+    background: gray;
     border-radius: 10px;
+
+    .messages-wrapper {
+        height: 90%;
+    }
+
+    .input-field {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding: 20px;
+        border-radius: 5px;
+
+        textarea {
+            resize: none;
+            border: none;
+            outline: none;
+            width: 100%;
+            padding: 10px;
+            border-radius: inherit;
+        }
+
+        .send-btn {
+            position: absolute;
+            right: 40px;
+            font-size: 24px;
+            color: black;
+            cursor: pointer;
+        }
+    }
 }
