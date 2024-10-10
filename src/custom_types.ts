@@ -1,6 +1,6 @@
 export type MessageType = {
 	content: string;
-	sender: string;
+	username: string;
 };
 
 export type UserType = {

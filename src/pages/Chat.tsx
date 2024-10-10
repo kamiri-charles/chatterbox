@@ -14,7 +14,6 @@ const Chat: React.FC<ChatProps> = ({ username }) => {
 	const [users, setUsers] = useState([]);
 	const [messages, setMessages] = useState<MessageType[]>([]);
 	const [loading, setLoading] = useState<boolean>(false);
-	const [receiverId, setReceiverId] = useState<string>("");
 
 	useEffect(() => {
 		const newSocket = io("http://localhost:3001");
@@ -43,15 +42,18 @@ const Chat: React.FC<ChatProps> = ({ username }) => {
 	return (
 		<div className="chat">
 			{connected ? (
-				<ChatBox messages={messages} />
+				<ChatBox
+					socket={socket}
+					messages={messages}
+					setMessages={setMessages}
+					username={username}
+				/>
 			) : (
 				<Welcome
 					users={users}
 					socket={socket}
 					loading={loading}
 					setLoading={setLoading}
-					receiverId={receiverId}
-					setReceiverId={setReceiverId}
 					setConnected={setConnected}
 				/>
 			)}

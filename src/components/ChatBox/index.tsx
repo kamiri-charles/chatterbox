@@ -1,33 +1,68 @@
-import { useState } from "react";
-import "./styles.scss";
+import { useEffect, useState } from "react";
 import { MessageType } from "../../custom_types";
-
-
+import { Socket } from "socket.io-client";
+import "./styles.scss";
 
 interface ChatBoxProps {
-    messages: MessageType[],
+	socket: Socket | undefined;
+	messages: MessageType[];
+	setMessages: (x: MessageType[]) => void;
+	username: string;
 }
 
-const ChatBox: React.FC<ChatBoxProps> = () => {
-    const [message, setMessage] = useState<string>();
+const ChatBox: React.FC<ChatBoxProps> = ({
+	socket,
+	messages,
+	setMessages,
+	username,
+}) => {
+	const [message, setMessage] = useState<string>();
 
-    return (
-        <div className="chat-box">
-            <div className="messages-wrapper">
-                <div className="message">Hello</div>
-                <div className="message">Hello too</div>
-                <div className="message received">Hello too</div>
-            </div>
-            
-            <div className="input-field">
-                <textarea placeholder="Enter message" value={message} onChange={e => setMessage(e.target.value)}></textarea>
+	useEffect(() => {
+		if (socket) {
+			socket.on("messages", (data) => setMessages(data.messages));
+		}
+	}, []);
 
-                <div className="send-btn" onClick={() => console.log(message)}>
-                    <i className="bx bx-send"></i>
-                </div>
-            </div>
-        </div>
-    )
-}
+	const handle_send_message = () => {
+		if (socket) {
+			const msg = {
+				content: message,
+				username: username,
+			};
+
+			socket.emit("new_message", msg);
+			setMessage("");
+		}
+	};
+
+	return (
+		<div className="chat-box">
+			<div className="messages-wrapper">
+				{messages.length > 0 ? (
+					<>
+						{messages.map((msg, idx) => (
+							<div className={`message ${msg.username !== username ? 'received' : ''}`} key={idx}>
+								{msg.content}
+							</div>
+						))}
+					</>
+				) : null}
+			</div>
+
+			<div className="input-field">
+				<textarea
+					placeholder="Enter message"
+					value={message}
+					onChange={(e) => setMessage(e.target.value)}
+				></textarea>
+
+				<div className="send-btn" onClick={() => handle_send_message()}>
+					<i className="bx bx-send"></i>
+				</div>
+			</div>
+		</div>
+	);
+};
 
 export default ChatBox;

@@ -8,8 +8,6 @@ interface WelcomeProps {
 	socket: Socket | undefined;
 	loading: boolean;
 	setLoading: (x: boolean) => void;
-	receiverId: string;
-	setReceiverId: (x: string) => void;
 	setConnected: (x: boolean) => void;
 }
 
@@ -18,34 +16,15 @@ const Welcome: React.FC<WelcomeProps> = ({
 	socket,
 	loading,
 	setLoading,
-	receiverId,
-	setReceiverId,
 	setConnected
 }) => {
-	const connect_random_person = () => {
+	const connect_server = () => {
 		setLoading(true);
 		if (socket) {
-			socket.on("users", (data) => {
-				// Automatically select a random user as the recipient when users list updates
-				if (!receiverId && data.users.length > 1) {
-					// Filter out the current user's own socket ID and pick a random user
-					const otherUsers = data.users.filter(
-						(user: UserType) => user.id !== socket.id
-					);
-					if (otherUsers.length > 0) {
-						const randomUser =
-							otherUsers[Math.floor(Math.random() * otherUsers.length)];
-						setReceiverId(randomUser.id); // Set the random recipient
-						setLoading(false);
-						setConnected(true);
-					}
-				} else {
-					alert("Internal server error. Please try again later.");
-					setLoading(false);
-				}
-			});
+			setConnected(true);
+
 		} else {
-			alert("Internal server error. Please try again later.");
+			alert("Internal server error. Try again later.");
 			setLoading(false);
 		}
 	};
@@ -102,7 +81,7 @@ const Welcome: React.FC<WelcomeProps> = ({
 						<div className="buttons">
 							<button
 								className="random-chat"
-								onClick={() => connect_random_person()}
+								onClick={() => connect_server()}
 							>
 								Meet My Next Bestie
 							</button>
