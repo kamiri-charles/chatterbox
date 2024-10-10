@@ -1,4 +1,4 @@
-import Navbar from "../components/Navbar";
+import Welcome from "../components/Welcome";
 import ChatBox from "../components/ChatBox";
 import { useState, useEffect } from "react";
 import { io } from "socket.io-client";
@@ -39,8 +39,8 @@ const Chat: React.FC<ChatProps> = ({username}) => {
 
 	return (
 		<div className="chat">
-			<Navbar users={users} username={username} />
-			<ChatBox messages={messages} />
+			<Welcome users={users} />
+			{/* <ChatBox messages={messages} /> */}
 		</div>
 	);
 };
