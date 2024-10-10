@@ -7,7 +7,25 @@
     border-radius: 10px;
 
     .messages-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: flex-end;
         height: 90%;
+        padding: 20px;
+
+        .message {
+            max-width: 300px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            background: white;
+            color: black;
+            margin-block: 5px;
+
+            &.received {
+                align-self: flex-start;
+            }
+        }
     }
 
     .input-field {

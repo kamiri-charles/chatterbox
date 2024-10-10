@@ -1,17 +1,23 @@
 import { useState } from "react";
 import "./styles.scss";
+import { MessageType } from "../../custom_types";
+
+
 
 interface ChatBoxProps {
-    unique_id: string,
+    messages: MessageType[],
 }
 
-const ChatBox: React.FC<ChatBoxProps> = ({unique_id}) => {
-    const [message, setMessage] = useState<string>()
+const ChatBox: React.FC<ChatBoxProps> = () => {
+    const [message, setMessage] = useState<string>();
+
     return (
         <div className="chat-box">
-            <div className="u-id">{unique_id ? unique_id : null}</div>
-
-            <div className="messages-wrapper"></div>
+            <div className="messages-wrapper">
+                <div className="message">Hello</div>
+                <div className="message">Hello too</div>
+                <div className="message received">Hello too</div>
+            </div>
             
             <div className="input-field">
                 <textarea placeholder="Enter message" value={message} onChange={e => setMessage(e.target.value)}></textarea>

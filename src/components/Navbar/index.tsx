@@ -1,9 +1,7 @@
+import { UserType } from "../../custom_types";
 import "./styles.scss";
 
-type UserType = {
-	id: string;
-	username: string;
-};
+
 interface NavbarProps {
 	users: UserType[];
 	username: string;
