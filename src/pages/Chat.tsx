@@ -8,7 +8,6 @@ interface ChatProps {
 }
 
 const Chat: React.FC<ChatProps> = ({username}) => {
-    const [userCount, setUserCount] = useState<number>(0);
 	const [users, setUsers] = useState([]);
 
 
@@ -25,9 +24,6 @@ const Chat: React.FC<ChatProps> = ({username}) => {
 			});
 		});
 
-        socket.on("user_count", (data) => {
-            setUserCount(data.count);
-        })
 
         socket.on("users", (data) => {
             setUsers(data.users);
@@ -40,7 +36,7 @@ const Chat: React.FC<ChatProps> = ({username}) => {
 
 	return (
 		<div className="chat">
-			<Navbar user_count={userCount} users={users} />
+			<Navbar users={users} username={username} />
 			<ChatBox unique_id={""} />
 		</div>
 	);
