@@ -1,48 +1,52 @@
 import { useEffect, useState } from "react";
 import { MessageType } from "../../custom_types";
 import { Socket } from "socket.io-client";
+import { v4 as uuidv4 } from "uuid";
 import "./styles.scss";
 
 interface ChatBoxProps {
 	socket: Socket | undefined;
-	messages: MessageType[];
-	setMessages: (x: MessageType[]) => void;
 	username: string;
+	roomId: string;
 }
 
 const ChatBox: React.FC<ChatBoxProps> = ({
 	socket,
-	messages,
-	setMessages,
 	username,
+	roomId
 }) => {
-	const [message, setMessage] = useState<string>();
+	const [messages, setMessages] = useState<MessageType[]>([]);
+	const [inputData, setInputData] = useState<string>();
 
 	useEffect(() => {
 		if (socket) {
-			socket.on("messages", (data) => setMessages(data.messages));
+			socket.emit("get_messages");
+			socket.on("messages", (data) => setMessages(data));
 		}
 	}, []);
 
 	const handle_send_message = () => {
 		if (socket) {
 			const msg = {
-				content: message,
-				username: username,
+				id: uuidv4(),
+				content: inputData,
+				sender: username,
+				timestamp: new Date()
 			};
 
-			socket.emit("new_message", msg);
-			setMessage("");
+			socket.emit("new_message", {roomId, msg});
+			setInputData("");
 		}
 	};
 
 	return (
 		<div className="chat-box">
+			<div className="room-id">{roomId}</div>
 			<div className="messages-wrapper">
 				{messages.length > 0 ? (
 					<>
 						{messages.map((msg, idx) => (
-							<div className={`message ${msg.username !== username ? 'received' : ''}`} key={idx}>
+							<div className={`message ${msg.sender !== username ? 'received' : ''}`} key={idx}>
 								{msg.content}
 							</div>
 						))}
@@ -53,8 +57,8 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 			<div className="input-field">
 				<textarea
 					placeholder="Enter message"
-					value={message}
-					onChange={(e) => setMessage(e.target.value)}
+					value={inputData}
+					onChange={(e) => setInputData(e.target.value)}
 				></textarea>
 
 				<div className="send-btn" onClick={() => handle_send_message()}>

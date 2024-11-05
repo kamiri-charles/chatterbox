@@ -1,6 +1,8 @@
 export type MessageType = {
+	id: string;
 	content: string;
-	username: string;
+	sender: string;
+	timestamp: Date;
 };
 
 export type UserType = {

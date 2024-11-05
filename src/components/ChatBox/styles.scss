@@ -7,6 +7,12 @@
     border-radius: 10px;
     padding: 20px;
 
+    .room-id {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+
     .messages-wrapper {
         display: flex;
         flex-direction: column;

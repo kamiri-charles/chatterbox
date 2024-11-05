@@ -2,7 +2,6 @@ import Welcome from "../components/Welcome";
 import ChatBox from "../components/ChatBox";
 import { useState, useEffect } from "react";
 import { Socket, io } from "socket.io-client";
-import { MessageType } from "../custom_types";
 
 interface ChatProps {
 	username: string;
@@ -12,7 +11,7 @@ const Chat: React.FC<ChatProps> = ({ username }) => {
 	const [socket, setSocket] = useState<Socket>();
 	const [connected, setConnected] = useState<boolean>(false);
 	const [users, setUsers] = useState([]);
-	const [messages, setMessages] = useState<MessageType[]>([]);
+	const [roomId, setRoomId] = useState<string>("");
 	const [loading, setLoading] = useState<boolean>(false);
 
 	useEffect(() => {
@@ -30,10 +29,6 @@ const Chat: React.FC<ChatProps> = ({ username }) => {
 			setUsers(data.users);
 		});
 
-		newSocket.on("new_message", (data) => {
-			setMessages(data.messages);
-		});
-
 		return () => {
 			newSocket.disconnect();
 		};
@@ -44,8 +39,7 @@ const Chat: React.FC<ChatProps> = ({ username }) => {
 			{connected ? (
 				<ChatBox
 					socket={socket}
-					messages={messages}
-					setMessages={setMessages}
+					roomId={roomId}
 					username={username}
 				/>
 			) : (
@@ -55,6 +49,7 @@ const Chat: React.FC<ChatProps> = ({ username }) => {
 					loading={loading}
 					setLoading={setLoading}
 					setConnected={setConnected}
+					setRoomId={setRoomId}
 				/>
 			)}
 		</div>
