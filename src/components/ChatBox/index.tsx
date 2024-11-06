@@ -39,15 +39,26 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 		}
 	};
 
+	const get_time = (t: Date | string) => {
+		let dateObj = typeof t === "string" ? new Date(t) : t;
+
+		return dateObj.toLocaleTimeString("en-US", {
+			hour: "2-digit",
+			minute: "2-digit",
+			hour12: true,
+		});;
+	}
+
 	return (
 		<div className="chat-box">
-			<div className="room-id">{roomId}</div>
 			<div className="messages-wrapper">
 				{messages.length > 0 ? (
 					<>
 						{messages.map((msg, idx) => (
 							<div className={`message ${msg.sender !== username ? 'received' : ''}`} key={idx}>
 								{msg.content}
+
+								<div className="timestamp">{get_time(msg.timestamp)}</div>
 							</div>
 						))}
 					</>
