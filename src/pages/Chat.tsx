@@ -34,6 +34,7 @@ const Chat: React.FC<ChatProps> = ({ username }) => {
 		};
 	}, [username]);
 
+	
 	return (
 		<div className="chat">
 			{connected ? (
