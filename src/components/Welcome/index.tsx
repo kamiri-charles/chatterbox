@@ -43,6 +43,13 @@ const Welcome: React.FC<WelcomeProps> = ({
 		}
 	};
 
+	const cancel_search = () => {
+		setLoading(false);
+		if (socket) {
+			socket.emit("cancel_search")
+		}
+	}
+
 
 	return (
 		<div className="welcome">
@@ -89,7 +96,7 @@ const Welcome: React.FC<WelcomeProps> = ({
 							<div className="loader">
 								<MetroSpinner color="black" size={30} />
 							</div>
-							<button className="cancel-search">Cancel Search</button>
+							<button className="cancel-search" onClick={() => cancel_search()}>Cancel Search</button>
 						</div>
 					) : (
 						<div className="buttons">
