@@ -9,10 +9,11 @@ interface ChatProps {
 
 const Chat: React.FC<ChatProps> = ({ username }) => {
 	const [socket, setSocket] = useState<Socket>();
-	const [connected, setConnected] = useState<boolean>(false);
+	const [randomChatFound, setRandomChatFound] = useState<boolean>(false);
 	const [users, setUsers] = useState([]);
 	const [roomId, setRoomId] = useState<string>("");
 	const [loading, setLoading] = useState<boolean>(false);
+	const [randomBuddyUsername, setRandomBuddyUsername] = useState<string>("");
 
 	useEffect(() => {
 		const newSocket = io("http://localhost:3001");
@@ -37,11 +38,12 @@ const Chat: React.FC<ChatProps> = ({ username }) => {
 	
 	return (
 		<div className="chat">
-			{connected ? (
+			{randomChatFound ? (
 				<ChatBox
 					socket={socket}
 					roomId={roomId}
 					username={username}
+					randomBuddyUsername={randomBuddyUsername}
 				/>
 			) : (
 				<Welcome
@@ -49,8 +51,9 @@ const Chat: React.FC<ChatProps> = ({ username }) => {
 					socket={socket}
 					loading={loading}
 					setLoading={setLoading}
-					setConnected={setConnected}
+					setRandomChatFound={setRandomChatFound}
 					setRoomId={setRoomId}
+					setRandomBuddyUsername={setRandomBuddyUsername}
 				/>
 			)}
 		</div>

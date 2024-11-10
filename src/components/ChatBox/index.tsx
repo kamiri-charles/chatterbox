@@ -8,14 +8,17 @@ interface ChatBoxProps {
 	socket: Socket | undefined;
 	username: string;
 	roomId: string;
+	randomBuddyUsername: string;
 }
 
 const ChatBox: React.FC<ChatBoxProps> = ({
 	socket,
 	username,
-	roomId
+	roomId,
+	randomBuddyUsername
 }) => {
 	const [messages, setMessages] = useState<MessageType[]>([]);
+	const [typingAlert, setTypingAlert] = useState<string>("");
 	const [inputData, setInputData] = useState<string>();
 
 	useEffect(() => {
@@ -51,26 +54,38 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 
 	return (
 		<div className="chat-box">
+			<div className="partner-username">You are chatting with {randomBuddyUsername}.</div>
 			<div className="messages-wrapper">
 				{messages.length > 0 ? (
 					<>
 						{messages.map((msg, idx) => (
-							<div className={`message ${msg.sender !== username ? 'received' : ''}`} key={idx}>
+							<div
+								className={`message ${
+									msg.sender !== username ? "received" : ""
+								}`}
+								key={idx}
+							>
 								{msg.content}
 
 								<div className="timestamp">{get_time(msg.timestamp)}</div>
 							</div>
 						))}
 					</>
-				) : null}
+				) : (
+					<div className="no-messages">
+						It's a bit quiet here... Start the convo with a fun fact or a random
+						question!
+					</div>
+				)}
 			</div>
 
 			<div className="input-field">
-				<textarea
+				<div className="typing-alert"></div>
+				<input
 					placeholder="Enter message"
 					value={inputData}
 					onChange={(e) => setInputData(e.target.value)}
-				></textarea>
+				></input>
 
 				<div className="send-btn" onClick={() => handle_send_message()}>
 					<i className="bx bx-send"></i>

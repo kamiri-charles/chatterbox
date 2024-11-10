@@ -38,14 +38,21 @@
         font-size: 18px;
         color: black;
 
-        .online {
-            margin-inline: 10px;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #3cfd0b;
+        .online, .offline {
+            display: flex;
+            align-items: center;
+            justify-content: center;
             
+            .indicator {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                background: #3cfd0b;
+                margin-inline: 10px;
+            } 
         }
+
+        .offline .indicator {background: red};
     }
 
     .app-meta {

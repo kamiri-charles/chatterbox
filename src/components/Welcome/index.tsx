@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Socket } from "socket.io-client";
 import { MetroSpinner } from "react-spinners-kit";
 import { UserType } from "../../custom_types";
@@ -9,8 +9,9 @@ interface WelcomeProps {
 	socket: Socket | undefined;
 	loading: boolean;
 	setLoading: (x: boolean) => void;
-	setConnected: (x: boolean) => void;
+	setRandomChatFound: (x: boolean) => void;
 	setRoomId: (x: string) => void;
+	setRandomBuddyUsername: (x: string) => void;
 }
 
 const Welcome: React.FC<WelcomeProps> = ({
@@ -18,22 +19,31 @@ const Welcome: React.FC<WelcomeProps> = ({
 	socket,
 	loading,
 	setLoading,
-	setConnected,
-	setRoomId
+	setRandomChatFound: setRandomChatFound,
+	setRoomId,
+	setRandomBuddyUsername,
 }) => {
+
+	const [socketConnected, setSocketConnected] = useState<boolean>(false);
 
 	useEffect(() => {
 		if (socket) {
-			console.log(socket.id);
+			if (socket.connected) setSocketConnected(true);
+			else setSocketConnected(false);
+
 			socket.on("chat_found", (data) => {
-				setRoomId(data.room);
+				setRoomId(data.room.roomId);
+
+				// Get the other person's username
+				const p = data.room.parties.find((x: any) => x.id != socket.id);
+				setRandomBuddyUsername(p.username);
 				setLoading(false);
-				setConnected(true);
+				setRandomChatFound(true);
 			})
 		}
-	}, [socket]);
+	}, [socket, socket?.connected]);
 
-	const connect_server = () => {
+	const find_random_chat = () => {
 		setLoading(true);
 		if (socket) {
 			socket.emit("find_random_chat");
@@ -54,8 +64,17 @@ const Welcome: React.FC<WelcomeProps> = ({
 	return (
 		<div className="welcome">
 			<div className="users-count">
-				<div className="online"></div>{" "}
-				{users.length == 0 ? 0 : users.length - 1} online
+				{socketConnected ? (
+					<div className="online">
+						<div className="indicator"></div>
+						<div>{users.length == 0 ? 0 : users.length - 1} online</div>
+					</div>
+				) : (
+					<div className="offline">
+						<div className="indicator"></div>
+						<div>Not connected</div>
+					</div>
+				)}
 			</div>
 
 			<div className="app-meta">
@@ -96,11 +115,13 @@ const Welcome: React.FC<WelcomeProps> = ({
 							<div className="loader">
 								<MetroSpinner color="black" size={30} />
 							</div>
-							<button className="cancel-search" onClick={() => cancel_search()}>Cancel Search</button>
+							<button className="cancel-search" onClick={() => cancel_search()}>
+								Cancel Search
+							</button>
 						</div>
 					) : (
 						<div className="buttons">
-							<button className="random-chat" onClick={() => connect_server()}>
+							<button className="random-chat" onClick={() => find_random_chat()}>
 								Meet My Next Bestie
 							</button>
 						</div>
