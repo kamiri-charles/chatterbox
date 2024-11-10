@@ -9,12 +9,17 @@ function App() {
 	const [username, setUsername] = useState<string>("");
 
 	useEffect(() => {
-		setUsername(`User#${Math.floor(Math.random() * 1000)}`);
+		let checkSavedUsername = localStorage.getItem("chatterboxSavedUsername");
+		if (checkSavedUsername) {
+			setUsername(checkSavedUsername);
+		} else {
+			setUsername(`User#${Math.floor(Math.random() * 10000)}`);
+		}
 	}, []);
 
 	return (
 		<div className="App">
-			<Header username={username} />
+			<Header username={username} setUsername={setUsername} />
 			<Router>
 				<Routes>
 					<Route path="/" element={<Chat username={username} />} />

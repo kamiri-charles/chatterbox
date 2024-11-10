@@ -19,13 +19,14 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 }) => {
 	const [messages, setMessages] = useState<MessageType[]>([]);
 	const [typingAlert, setTypingAlert] = useState<string>("");
-	const [inputData, setInputData] = useState<string>();
+	const [inputData, setInputData] = useState<string>("");
 
 	useEffect(() => {
 		if (socket) {
 			socket.emit("get_messages");
 			socket.on("messages", (data) => setMessages(data));
 		}
+
 	}, []);
 
 	const handle_send_message = () => {
