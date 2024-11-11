@@ -88,8 +88,9 @@
         color: white;
         margin: 0 auto;
         margin-top: 20px;
-        padding: 16px;
         background: #bdbdbd;
+        padding-block: 2px;
+        padding-right: 10px;
         
         .typing-alert {
             position: absolute;
@@ -99,23 +100,36 @@
             font-family: monospace;
         }
 
-        input {
+        textarea {
+            resize: none;
             border: none;
             outline: none;
-            width: 100%;
-            padding: 0 10px;
+            width: 90%;
+            min-height: 40px;
+            overflow-y: auto;
             border-radius: inherit;
             background: inherit;
+            padding-top: 12px;
+            padding-bottom: 6px;
+            transition: all 0.3 ease;
 
             &::placeholder {
                 color: black;
             }
+
+            &::-webkit-scrollbar {
+                width: 2px;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background: black;
+            }
         }
+
+        
 
         .send-btn {
             color: black;
-            position: absolute;
-            right: 40px;
             font-size: 24px;
             cursor: pointer;
         }

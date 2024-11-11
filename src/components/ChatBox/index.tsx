@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MessageType } from "../../custom_types";
 import { Socket } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
@@ -18,13 +18,18 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 	randomBuddyUsername
 }) => {
 	const [messages, setMessages] = useState<MessageType[]>([]);
-	const [typingAlert, setTypingAlert] = useState<string>("");
 	const [inputData, setInputData] = useState<string>("");
+	const textareaRef = useRef<HTMLTextAreaElement>(null);
 
 	useEffect(() => {
 		if (socket) {
 			socket.emit("get_messages");
 			socket.on("messages", (data) => setMessages(data));
+
+			// Handle typing
+			textareaRef.current?.addEventListener('input', () => {
+				handle_typing();
+			})
 		}
 
 	}, []);
@@ -52,6 +57,29 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 			hour12: true,
 		});;
 	}
+
+	const handle_typing = () => {
+		if (textareaRef.current) {
+
+			// Format height
+			let abs_height = parseInt(textareaRef.current.style.height);
+			
+			if (abs_height <= 60) {
+				textareaRef.current.style.height = 'auto';
+				textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
+			} else {
+				textareaRef.current.style.height = "60px";
+			}
+		}
+	}
+
+	const handle_key_down = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+		if (e.key === "Enter" && !e.shiftKey) {
+			e.preventDefault(); // Prevents newline
+			handle_send_message(); // Sends message
+		}
+	};
+
 
 	return (
 		<div className="chat-box">
@@ -82,11 +110,13 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 
 			<div className="input-field">
 				<div className="typing-alert"></div>
-				<input
+				<textarea
+					ref={textareaRef}
 					placeholder="Enter message"
 					value={inputData}
 					onChange={(e) => setInputData(e.target.value)}
-				></input>
+					onKeyDown={handle_key_down}
+				></textarea>
 
 				<div className="send-btn" onClick={() => handle_send_message()}>
 					<i className="bx bx-send"></i>
