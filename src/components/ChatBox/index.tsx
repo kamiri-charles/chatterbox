@@ -15,11 +15,14 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 	socket,
 	username,
 	roomId,
-	randomBuddyUsername
+	randomBuddyUsername,
 }) => {
 	const [messages, setMessages] = useState<MessageType[]>([]);
+	const [isTyping, setIsTyping] = useState(false);
 	const [inputData, setInputData] = useState<string>("");
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
+	const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
 
 	useEffect(() => {
 		if (socket) {
@@ -27,12 +30,31 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 			socket.on("messages", (data) => setMessages(data));
 
 			// Handle typing
-			textareaRef.current?.addEventListener('input', () => {
-				handle_typing();
-			})
+			textareaRef.current?.addEventListener("input", () => handle_typing());
+
+			// Show typing indicator when the other participant is typing
+			socket.on("typing", (data) => {
+				if (data.username !== username) {
+					setIsTyping(true);
+				}
+			});
+
+			// Hide typing indicator when the other participant stops typing
+			socket.on("stop_typing", (data) => {
+				if (data.username !== username) {
+					setIsTyping(false);
+				}
+			});
 		}
 
-	}, []);
+		return () => {
+			if (socket) {
+				socket.off("typing");
+				socket.off("stop_typing");
+			}
+		};
+	}, [socket]);
+
 
 	const handle_send_message = () => {
 		if (socket) {
@@ -40,10 +62,10 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 				id: uuidv4(),
 				content: inputData,
 				sender: username,
-				timestamp: new Date()
+				timestamp: new Date(),
 			};
 
-			socket.emit("new_message", {roomId, msg});
+			socket.emit("new_message", { roomId, msg });
 			setInputData("");
 		}
 	};
@@ -55,35 +77,46 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 			hour: "2-digit",
 			minute: "2-digit",
 			hour12: true,
-		});;
-	}
+		});
+	};
+
 
 	const handle_typing = () => {
 		if (textareaRef.current) {
-
-			// Format height
+			// Adjust textarea height
 			let abs_height = parseInt(textareaRef.current.style.height);
-			
 			if (abs_height <= 60) {
-				textareaRef.current.style.height = 'auto';
-				textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
+				textareaRef.current.style.height = "auto";
+				textareaRef.current.style.height =
+					textareaRef.current.scrollHeight + "px";
 			} else {
 				textareaRef.current.style.height = "60px";
 			}
+
+			// Emit 'typing' event with a debounce
+			if (socket) {
+				if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+				socket.emit("typing", { roomId, username });
+
+				typingTimeoutRef.current = setTimeout(() => {
+					socket.emit("stop_typing", { roomId, username });
+				}, 1000);
+			}
 		}
-	}
+	};
 
 	const handle_key_down = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
 		if (e.key === "Enter" && !e.shiftKey) {
 			e.preventDefault(); // Prevents newline
-			handle_send_message(); // Sends message
+			handle_send_message();
 		}
 	};
 
-
 	return (
 		<div className="chat-box">
-			<div className="partner-username">You are chatting with {randomBuddyUsername}.</div>
+			<div className="partner-username">
+				You are chatting with {randomBuddyUsername}.
+			</div>
 			<div className="messages-wrapper">
 				{messages.length > 0 ? (
 					<>
@@ -109,7 +142,10 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 			</div>
 
 			<div className="input-field">
-				<div className="typing-alert"></div>
+				<div className="typing-alert">
+					{isTyping && `${randomBuddyUsername} is typing...`}
+				</div>
+
 				<textarea
 					ref={textareaRef}
 					placeholder="Enter message"
