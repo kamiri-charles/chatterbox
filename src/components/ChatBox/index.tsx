@@ -25,7 +25,6 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 	const [isTyping, setIsTyping] = useState(false);
 	const [inputData, setInputData] = useState<string>("");
 	const [partnerDisconnected, setPartnerDisconnected] = useState(false);
-	const [redirectCounter, setRedirectCounter] = useState(7); // 7s
 
 
 	useEffect(() => {
@@ -56,20 +55,6 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 			});
 		}
 
-		// Countdown logic for redirect after disconnection
-		if (partnerDisconnected && redirectCounter > 0) {
-			const timer = setInterval(() => {
-				setRedirectCounter((prevCounter) => prevCounter - 1);
-			}, 1000);
-
-			if (redirectCounter <= 1) {
-				clearInterval(timer);
-				setRandomChatFound(false);
-			}
-
-			return () => clearInterval(timer);
-		}
-
 		return () => {
 			if (socket) {
 				socket.off("typing");
@@ -77,9 +62,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 				socket.off("user_disconnected");
 			}
 		};
-	}, [socket, partnerDisconnected, redirectCounter]);
-
-
+	}, [socket]);
 
 	const handle_send_message = () => {
 		if (socket && inputData.length > 0) {
@@ -137,11 +120,34 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 		}
 	};
 
+	const handle_save = () => {
+		alert("This feature is under development!");
+	}
+
+
+	const handle_disconnect = () => {
+		if (socket) {
+			socket.emit("exit_room", {roomId, username});
+			setRandomChatFound(false);
+		}
+	}
+
 	return (
 		<div className="chat-box">
-			<div className="partner-username">
-				You are chatting with {randomBuddyUsername}.
-				<span className="disconnected">{partnerDisconnected ? `disconnected-(redirecting: ${redirectCounter}s)`: ""}</span>
+			<div className="sub-header">
+				<div className="buddy-username">
+					You are chatting with {randomBuddyUsername} {partnerDisconnected ? <span className="disconnected">(disconnected)</span>: null}
+				</div>
+
+				<div className="actions">
+					<div className="action save" onClick={() => handle_save()}>
+						<i className="bx bx-save"></i>
+					</div>
+
+					<div className="action exit" onClick={() => handle_disconnect()}>
+						<i className="bx bx-x"></i>
+					</div>
+				</div>
 			</div>
 			<div className="messages-wrapper">
 				{messages.length > 0 ? (

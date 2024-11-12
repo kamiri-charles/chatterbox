@@ -19,7 +19,7 @@ const Welcome: React.FC<WelcomeProps> = ({
 	socket,
 	loading,
 	setLoading,
-	setRandomChatFound: setRandomChatFound,
+	setRandomChatFound,
 	setRoomId,
 	setRandomBuddyUsername,
 }) => {
