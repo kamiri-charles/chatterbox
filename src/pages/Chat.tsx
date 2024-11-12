@@ -44,6 +44,7 @@ const Chat: React.FC<ChatProps> = ({ username }) => {
 					roomId={roomId}
 					username={username}
 					randomBuddyUsername={randomBuddyUsername}
+					setRandomChatFound={setRandomChatFound}
 				/>
 			) : (
 				<Welcome

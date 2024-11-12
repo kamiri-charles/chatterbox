@@ -9,6 +9,7 @@ interface ChatBoxProps {
 	username: string;
 	roomId: string;
 	randomBuddyUsername: string;
+	setRandomChatFound: (x: boolean) => void;
 }
 
 const ChatBox: React.FC<ChatBoxProps> = ({
@@ -16,12 +17,15 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 	username,
 	roomId,
 	randomBuddyUsername,
+	setRandomChatFound
 }) => {
+	const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+	const textareaRef = useRef<HTMLTextAreaElement>(null);
 	const [messages, setMessages] = useState<MessageType[]>([]);
 	const [isTyping, setIsTyping] = useState(false);
 	const [inputData, setInputData] = useState<string>("");
-	const textareaRef = useRef<HTMLTextAreaElement>(null);
-	const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+	const [partnerDisconnected, setPartnerDisconnected] = useState(false);
+	const [redirectCounter, setRedirectCounter] = useState(7); // 7s
 
 
 	useEffect(() => {
@@ -45,19 +49,40 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 					setIsTyping(false);
 				}
 			});
+
+			// Handle user disconnection
+			socket.on("user_disconnected", (_) => { // Use this data to display logs
+				setPartnerDisconnected(true);
+			});
+		}
+
+		// Countdown logic for redirect after disconnection
+		if (partnerDisconnected && redirectCounter > 0) {
+			const timer = setInterval(() => {
+				setRedirectCounter((prevCounter) => prevCounter - 1);
+			}, 1000);
+
+			if (redirectCounter <= 1) {
+				clearInterval(timer);
+				setRandomChatFound(false);
+			}
+
+			return () => clearInterval(timer);
 		}
 
 		return () => {
 			if (socket) {
 				socket.off("typing");
 				socket.off("stop_typing");
+				socket.off("user_disconnected");
 			}
 		};
-	}, [socket]);
+	}, [socket, partnerDisconnected, redirectCounter]);
+
 
 
 	const handle_send_message = () => {
-		if (socket) {
+		if (socket && inputData.length > 0) {
 			const msg = {
 				id: uuidv4(),
 				content: inputData,
@@ -116,6 +141,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 		<div className="chat-box">
 			<div className="partner-username">
 				You are chatting with {randomBuddyUsername}.
+				<span className="disconnected">{partnerDisconnected ? `disconnected-(redirecting: ${redirectCounter}s)`: ""}</span>
 			</div>
 			<div className="messages-wrapper">
 				{messages.length > 0 ? (
