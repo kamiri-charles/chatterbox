@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
-import Chat from "./pages/Chat";
+import Landing from "./pages/Landing";
 import "boxicons/css/boxicons.min.css";
 import "./App.css";
 
@@ -22,7 +22,7 @@ function App() {
 			<Header username={username} setUsername={setUsername} />
 			<Router basename="chatterbox">
 				<Routes>
-					<Route path="/" element={<Chat username={username} />} />
+					<Route path="/" element={<Landing username={username} />} />
 				</Routes>
 			</Router>
 		</div>

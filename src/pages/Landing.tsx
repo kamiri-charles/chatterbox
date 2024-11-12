@@ -7,7 +7,7 @@ interface ChatProps {
 	username: string;
 }
 
-const Chat: React.FC<ChatProps> = ({ username }) => {
+const Landing: React.FC<ChatProps> = ({ username }) => {
 	const [socket, setSocket] = useState<Socket>();
 	const [randomChatFound, setRandomChatFound] = useState<boolean>(false);
 	const [users, setUsers] = useState([]);
@@ -16,7 +16,13 @@ const Chat: React.FC<ChatProps> = ({ username }) => {
 	const [randomBuddyUsername, setRandomBuddyUsername] = useState<string>("");
 
 	useEffect(() => {
-		const newSocket = io("http://localhost:3001");
+		// Development
+		//const newSocket = io("http://localhost:3001");
+
+		// Production
+		const newSocket = io(
+			"https://chatterbox-server-4f094ffa6ffe.herokuapp.com/"
+		);
 		setSocket(newSocket);
 
 		newSocket.on("connect", () => {
@@ -61,4 +67,4 @@ const Chat: React.FC<ChatProps> = ({ username }) => {
 	);
 };
 
-export default Chat;
+export default Landing;
