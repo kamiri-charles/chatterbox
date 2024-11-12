@@ -20,7 +20,7 @@ function App() {
 	return (
 		<div className="App">
 			<Header username={username} setUsername={setUsername} />
-			<Router>
+			<Router basename="chatterbox">
 				<Routes>
 					<Route path="/" element={<Chat username={username} />} />
 				</Routes>
