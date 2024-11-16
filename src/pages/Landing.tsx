@@ -1,6 +1,6 @@
+import { useState, useEffect } from "react";
 import Welcome from "../components/Welcome";
 import ChatBox from "../components/ChatBox";
-import { useState, useEffect } from "react";
 import { Socket, io } from "socket.io-client";
 
 interface ChatProps {
