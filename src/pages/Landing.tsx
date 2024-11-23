@@ -17,7 +17,7 @@ const Landing: React.FC<ChatProps> = ({ username }) => {
 
 	useEffect(() => {
 		// Development
-		//const newSocket = io("http://localhost:3001");
+		// const newSocket = io("http://localhost:3001");
 
 		// Production
 		const newSocket = io(
