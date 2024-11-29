@@ -41,7 +41,6 @@ const Landing: React.FC<ChatProps> = ({ username }) => {
 		};
 	}, [username]);
 
-	
 	return (
 		<div className="chat">
 			{randomChatFound ? (
