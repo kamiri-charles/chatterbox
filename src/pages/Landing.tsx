@@ -17,12 +17,12 @@ const Landing: React.FC<ChatProps> = ({ username }) => {
 
 	useEffect(() => {
 		// Development
-		// const newSocket = io("http://localhost:3001");
+		const newSocket = io("http://localhost:3001");
 
 		// Production
-		const newSocket = io(
+		/* const newSocket = io(
 			"https://chatterbox-server-4f094ffa6ffe.herokuapp.com/"
-		);
+		); */
 		setSocket(newSocket);
 
 		newSocket.on("connect", () => {
