@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { Socket } from "socket.io-client";
 import { MetroSpinner } from "react-spinners-kit";
 import { UserType } from "../../custom_types";
@@ -12,6 +12,7 @@ interface WelcomeProps {
 	setRandomChatFound: (x: boolean) => void;
 	setRoomId: (x: string) => void;
 	setRandomBuddyUsername: (x: string) => void;
+	setServersDisplay: Dispatch<SetStateAction<boolean>>;
 }
 
 const Welcome: React.FC<WelcomeProps> = ({
@@ -22,6 +23,7 @@ const Welcome: React.FC<WelcomeProps> = ({
 	setRandomChatFound,
 	setRoomId,
 	setRandomBuddyUsername,
+	setServersDisplay
 }) => {
 
 	const [socketConnected, setSocketConnected] = useState<boolean>(false);
@@ -124,6 +126,8 @@ const Welcome: React.FC<WelcomeProps> = ({
 							<button className="random-chat" onClick={() => find_random_chat()}>
 								Meet My Next Bestie
 							</button>
+
+							<button onClick={() => setServersDisplay(true)}>Join a Server</button>
 						</div>
 					)}
 				</div>
