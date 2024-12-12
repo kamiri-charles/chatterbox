@@ -75,27 +75,3 @@ const Landing: React.FC<ChatProps> = ({ username }) => {
 };
 
 export default Landing;
-
-{
-	/* <div className="chat">
-			{randomChatFound ? (
-				<ChatBox
-					socket={socket}
-					roomId={roomId}
-					username={username}
-					randomBuddyUsername={randomBuddyUsername}
-					setRandomChatFound={setRandomChatFound}
-				/>
-			) : (
-				<Welcome
-					users={users}
-					socket={socket}
-					loading={loading}
-					setLoading={setLoading}
-					setRandomChatFound={setRandomChatFound}
-					setRoomId={setRoomId}
-					setRandomBuddyUsername={setRandomBuddyUsername}
-				/>
-			)}
-		</div> */
-}
