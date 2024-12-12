@@ -68,7 +68,6 @@ const Landing: React.FC<ChatProps> = ({ username }) => {
 		}
 	}
 
-	
 	return (
 		<div className="chat">{get_comp()}</div>
 		
