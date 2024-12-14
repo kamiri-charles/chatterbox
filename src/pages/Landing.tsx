@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Welcome from "../components/Welcome";
 import ChatBox from "../components/ChatBox";
 import { Socket, io } from "socket.io-client";
-import ServersList from "../components/ServersList";
+import PublicRooms from "../components/PublicRooms";
 
 interface ChatProps {
 	username: string;
@@ -64,7 +64,7 @@ const Landing: React.FC<ChatProps> = ({ username }) => {
 				/>;
 			}
 		} else {
-			return <ServersList setServersDisplay={setServersDisplay} />;
+			return <PublicRooms socket={socket} setServersDisplay={setServersDisplay} />;
 		}
 	}
 

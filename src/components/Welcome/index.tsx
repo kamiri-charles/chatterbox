@@ -127,7 +127,7 @@ const Welcome: React.FC<WelcomeProps> = ({
 								Meet My Next Bestie
 							</button>
 
-							<button onClick={() => setServersDisplay(true)}>Join a Server</button>
+							<button onClick={() => setServersDisplay(true)}>Public Rooms</button>
 						</div>
 					)}
 				</div>
