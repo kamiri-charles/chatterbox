@@ -25,13 +25,10 @@ const RoomChat: FC<RoomChatProps> = ({ socket, username, roomName }) => {
 			socket.emit("join_room", {roomName, username});
 			
 			socket.on("room_participants", (data) => {
-				console.log("Participants: ", data.participants);
 				setRoomParticipants(data.participants);
 			})
 
-            socket.on("room_messages", (data) => {
-                setRoomMessages(data.room_messages);
-            })
+            socket.on("room_messages", (data) => setRoomMessages(data));
 
 			// Handle typing
 			textareaRef.current?.addEventListener("input", () => handle_typing());
@@ -120,7 +117,7 @@ const RoomChat: FC<RoomChatProps> = ({ socket, username, roomName }) => {
 	return (
 		<div className="room-chat">
 			<div className="sub-header">
-				<div className="room-name">Room Name {roomParticipants.length}</div>
+				<div className="room-name">{roomName}</div>
 
 				<div className="actions">
 					<div className="action save" onClick={() => handle_save()}>
@@ -137,13 +134,16 @@ const RoomChat: FC<RoomChatProps> = ({ socket, username, roomName }) => {
 					<>
 						{roomMessages.map((msg, idx) => (
 							<div
-								className={`message ${
-									msg.sender !== username ? "received" : ""
+								className={`message${
+									msg.sender !== username ? " received" : ""
 								}`}
 								key={idx}
 							>
-								{msg.content}
+								{msg.sender !== username ? (
+									<div className="sender">{msg.sender}</div>
 
+								): null}
+								{msg.content}
 								<div className="timestamp">{get_time(msg.timestamp)}</div>
 							</div>
 						))}
