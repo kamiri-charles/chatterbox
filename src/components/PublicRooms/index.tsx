@@ -5,6 +5,8 @@ import "./styles.scss";
 interface PublicRoomsProps {
     socket: Socket | undefined;
     setServersDisplay: Dispatch<SetStateAction<boolean>>;
+    setPublicRoomName: Dispatch<SetStateAction<string>>;
+    setJoinedPubRoom: Dispatch<SetStateAction<boolean>>;
 }
 
 interface RoomBaseProps {
@@ -13,7 +15,7 @@ interface RoomBaseProps {
   roomUserCount: number;
 }
 
-const PublicRooms: FC<PublicRoomsProps> = ({socket, setServersDisplay}) => {
+const PublicRooms: FC<PublicRoomsProps> = ({socket, setServersDisplay, setPublicRoomName, setJoinedPubRoom}) => {
   const [roomsBaseData, setRoomsBaseData] = useState<RoomBaseProps[]>([]);
 
   useEffect(() => {
@@ -29,6 +31,12 @@ const PublicRooms: FC<PublicRoomsProps> = ({socket, setServersDisplay}) => {
 		}
 	}, [socket]);
 
+  const handle_select_room = (room_name: string) => {
+    setPublicRoomName(room_name);
+    setJoinedPubRoom(true);
+    setServersDisplay(false);
+  }
+
   return (
     <div className="rooms-list">
         <div className="r-list-header">
@@ -43,7 +51,7 @@ const PublicRooms: FC<PublicRoomsProps> = ({socket, setServersDisplay}) => {
                 <div className="room-name">{room.roomName}</div>
                 <div className="room-desc">{room.roomDesc}</div>
                 <div className="user-count"><i className="bx bx-user"></i> <span>{room.roomUserCount}</span></div>
-                <div className="join-room-btn">Connect</div>
+                <div className="join-room-btn" onClick={() => handle_select_room(room.roomName)}>Connect</div>
               </div>
             ))}
         </div>

@@ -1,35 +1,37 @@
-import { useEffect, useRef, useState } from "react";
-import { MessageType } from "../../custom_types";
+import { FC, useState, useRef, useEffect } from "react";
 import { Socket } from "socket.io-client";
+import { MessageType } from "../../custom_types";
 import { v4 as uuidv4 } from "uuid";
 import "./styles.scss";
 
-interface ChatBoxProps {
-	socket: Socket | undefined;
+interface RoomChatProps {
 	username: string;
-	roomId: string;
-	randomBuddyUsername: string;
-	setRandomChatFound: (x: boolean) => void;
+	socket: Socket | undefined;
+	roomName: string;
 }
 
-const ChatBox: React.FC<ChatBoxProps> = ({
-	socket,
-	username,
-	roomId,
-	randomBuddyUsername,
-	setRandomChatFound
-}) => {
-	const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-	const textareaRef = useRef<HTMLTextAreaElement>(null);
-	const [messages, setMessages] = useState<MessageType[]>([]);
-	const [isTyping, setIsTyping] = useState(false);
-	const [inputData, setInputData] = useState<string>("");
-	const [partnerDisconnected, setPartnerDisconnected] = useState(false);
 
+const RoomChat: FC<RoomChatProps> = ({ socket, username, roomName }) => {
+	const [roomMessages, setRoomMessages] = useState<MessageType[]>([]);
+	const textareaRef = useRef<HTMLTextAreaElement>(null);
+	const [inputData, setInputData] = useState<string>("");
+    const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const [isTyping, setIsTyping] = useState(false);
+    const [roomParticipants, setRoomParticipants] = useState<{socketId: string, username: string}[]>([]);
 
 	useEffect(() => {
 		if (socket) {
-			socket.on("messages", (data) => setMessages(data));
+
+			socket.emit("join_room", {roomName, username});
+			
+			socket.on("room_participants", (data) => {
+				console.log("Participants: ", data.participants);
+				setRoomParticipants(data.participants);
+			})
+
+            socket.on("room_messages", (data) => {
+                setRoomMessages(data.room_messages);
+            })
 
 			// Handle typing
 			textareaRef.current?.addEventListener("input", () => handle_typing());
@@ -47,34 +49,18 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 					setIsTyping(false);
 				}
 			});
-
-			// Handle user disconnection
-			socket.on("user_disconnected", (_) => {
-				setPartnerDisconnected(true);
-			});
 		}
 
 		return () => {
 			if (socket) {
 				socket.off("typing");
 				socket.off("stop_typing");
-				socket.off("user_disconnected");
 			}
 		};
 	}, [socket]);
 
-	const handle_send_message = () => {
-		if (socket && inputData.length > 0) {
-			const msg = {
-				id: uuidv4(),
-				content: inputData,
-				sender: username,
-				timestamp: new Date(),
-			};
-
-			socket.emit("new_message", { roomId, msg });
-			setInputData("");
-		}
+	const handle_save = () => {
+		alert("This feature is under development!");
 	};
 
 	const get_time = (t: Date | string) => {
@@ -87,6 +73,25 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 		});
 	};
 
+	const handle_key_down = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+		if (e.key === "Enter" && !e.shiftKey) {
+			e.preventDefault(); // Prevents newline
+			handle_send_message();
+		}
+	};
+	const handle_send_message = () => {
+		if (socket && inputData.length > 0) {
+			const msg = {
+				id: uuidv4(),
+				content: inputData,
+				sender: username,
+				timestamp: new Date(),
+			};
+
+			socket.emit("send_message", { roomName, msg });
+			setInputData("");
+		}
+	};
 
 	const handle_typing = () => {
 		if (textareaRef.current) {
@@ -103,55 +108,34 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 			// Emit 'typing' event with a debounce
 			if (socket) {
 				if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
-				socket.emit("typing", { roomId, username });
+				socket.emit("typing", { roomName, username });
 
 				typingTimeoutRef.current = setTimeout(() => {
-					socket.emit("stop_typing", { roomId, username });
+					socket.emit("stop_typing", { roomName, username });
 				}, 1000);
 			}
 		}
 	};
 
-	const handle_key_down = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-		if (e.key === "Enter" && !e.shiftKey) {
-			e.preventDefault(); // Prevents newline
-			handle_send_message();
-		}
-	};
-
-	const handle_save = () => {
-		alert("This feature is under development!");
-	}
-
-
-	const handle_disconnect = () => {
-		if (socket) {
-			socket.emit("exit_room", {roomId, username});
-			setRandomChatFound(false);
-		}
-	}
-
 	return (
-		<div className="chat-box">
+		<div className="room-chat">
 			<div className="sub-header">
-				<div className="buddy-username">
-					You are chatting with {randomBuddyUsername} {partnerDisconnected ? <span className="disconnected">(disconnected)</span>: null}
-				</div>
+				<div className="room-name">Room Name {roomParticipants.length}</div>
 
 				<div className="actions">
 					<div className="action save" onClick={() => handle_save()}>
 						<i className="bx bx-save"></i>
 					</div>
 
-					<div className="action exit" onClick={() => handle_disconnect()}>
+					<div className="action exit">
 						<i className="bx bx-x"></i>
 					</div>
 				</div>
 			</div>
 			<div className="messages-wrapper">
-				{messages.length > 0 ? (
+				{roomMessages.length > 0 ? (
 					<>
-						{messages.map((msg, idx) => (
+						{roomMessages.map((msg, idx) => (
 							<div
 								className={`message ${
 									msg.sender !== username ? "received" : ""
@@ -173,9 +157,9 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 			</div>
 
 			<div className="input-field">
-				<div className="typing-alert">
+				{/* <div className="typing-alert">
 					{isTyping && `${randomBuddyUsername} is typing...`}
-				</div>
+				</div> */}
 
 				<textarea
 					ref={textareaRef}
@@ -193,4 +177,4 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 	);
 };
 
-export default ChatBox;
+export default RoomChat;
