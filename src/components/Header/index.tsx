@@ -12,8 +12,6 @@ const Header: React.FC<HeaderProps> = ({ username, setUsername }) => {
 
 	return (
 		<div className="header">
-			<div className="brand-logo">ChatterBox</div>
-
 			<div className="username" onClick={() => setChangeUsernameActive(true)}>
 				{username}
 				<i className="bx bx-edit-alt"></i>
