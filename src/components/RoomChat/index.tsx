@@ -115,7 +115,7 @@ const RoomChat: FC<RoomChatProps> = ({ socket, username, roomName }) => {
 	};
 
 	return (
-		<div className="room-chat">
+		<div className="room-chat component-wrapper">
 			<div className="sub-header">
 				<div className="room-name">{roomName}</div>
 

@@ -38,7 +38,7 @@ const PublicRooms: FC<PublicRoomsProps> = ({socket, setServersDisplay, setPublic
   }
 
   return (
-    <div className="rooms-list">
+    <div className="rooms-list component-wrapper">
         <div className="r-list-header">
             <div className="back" onClick={() => setServersDisplay(false)}><i className="bx bx-left-arrow-alt"></i></div>
             <i className="bx bx-message-square"></i>

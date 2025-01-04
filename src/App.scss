@@ -1,0 +1,41 @@
+:root {
+  --ui-black: #303633;
+  --ui-primary: #8BE8CB;
+  --ui-tertiary: #9C7A97;
+  --ui-secondary: #7EA2AA;
+  --ui-gray: #888DA7;
+}
+
+.App {
+  width: 100vw;
+  height: 100vh;
+  background: var(--ui-black);
+  font-family: "Roboto", sans-serif;
+  color: var(--ui-black);
+}
+
+.chat {
+  width: 100vw;
+  position: fixed;
+  top: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.component-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 900px;
+    height: 80vh;
+    background: var(--ui-secondary);
+    padding: 20px;
+    border-radius: 5px;
+
+    @media(max-width: 768px) {
+        height: calc(100vh - 80px);
+        border-radius: 0;
+    }
+}
+

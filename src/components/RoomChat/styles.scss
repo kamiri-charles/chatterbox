@@ -1,19 +1,4 @@
 .room-chat {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    width: 900px;
-    height: 80vh;
-    background: white;
-    border-radius: 10px;
-    padding: 20px;
-    overflow: hidden;
-
-    @media(max-width: 768px) {
-        height: calc(100vh - 80px);
-        border-radius: 0;
-    }
-
     .sub-header {
         position: absolute;
         top: 0;

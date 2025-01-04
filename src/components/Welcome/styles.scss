@@ -1,18 +1,4 @@
 .welcome {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    width: 900px;
-    height: 80vh;
-    background: #929292;
-    border-radius: 10px;
-    padding: 20px;
-
-    @media(max-width: 768px) {
-        height: calc(100vh - 80px);
-        border-radius: 0;
-    }
-
     .searching {
         display: flex;
         flex-direction: column;
@@ -69,10 +55,10 @@
         .logo {
             font-size: 50px;
         }
-
+        
         .welcome-text {
             padding: 20px;
-
+            
             .welcome-text-title {
                 font-family: "Edu AU VIC WA NT Guides", cursive;
                 font-size: 24px;

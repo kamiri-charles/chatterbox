@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Landing from "./pages/Landing";
 import "boxicons/css/boxicons.min.css";
-import "./App.css";
+import "./App.scss";
 
 function App() {
 	const [username, setUsername] = useState<string>("");

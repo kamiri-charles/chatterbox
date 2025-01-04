@@ -64,7 +64,7 @@ const Welcome: React.FC<WelcomeProps> = ({
 
 
 	return (
-		<div className="welcome">
+		<div className="welcome component-wrapper">
 			<div className="users-count">
 				{socketConnected ? (
 					<div className="online">

@@ -132,7 +132,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 	}
 
 	return (
-		<div className="chat-box">
+		<div className="chat-box component-wrapper">
 			<div className="sub-header">
 				<div className="buddy-username">
 					You are chatting with {randomBuddyUsername} {partnerDisconnected ? <span className="disconnected">(disconnected)</span>: null}
