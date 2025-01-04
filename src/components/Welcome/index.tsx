@@ -85,7 +85,7 @@ const Welcome: React.FC<WelcomeProps> = ({
 				</div>
 
 				<div className="welcome-text">
-					<div className="welcome-text-title">Welcome to ChatterBox!</div>
+					<div className="welcome-text-title">Welcome to <span>chatterbox.</span></div>
 
 					<div className="welcome-text-content">
 						Dive into spontaneous conversations with people from around the

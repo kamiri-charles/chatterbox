@@ -1,9 +1,10 @@
 :root {
-  --ui-black: #303633;
-  --ui-primary: #8BE8CB;
-  --ui-tertiary: #9C7A97;
-  --ui-secondary: #7EA2AA;
-  --ui-gray: #888DA7;
+  --ui-black: #000;
+  --ui-primary: #0c75a1;
+  --ui-tertiary: #70C1B3;
+  --ui-secondary: #FF1654;
+  --ui-gray: #B2DBBF;
+  --ui-white: #dbdbdb;
 }
 
 .App {
@@ -29,7 +30,7 @@
     flex-direction: column;
     width: 900px;
     height: 80vh;
-    background: var(--ui-secondary);
+    background: var(--ui-white);
     padding: 20px;
     border-radius: 5px;
 
