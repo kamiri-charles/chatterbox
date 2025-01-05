@@ -3,24 +3,44 @@
         position: absolute;
         top: 0;
         left: 0;
-        background: black;
+        background: var(--ui-primary);
         width: 100%;
         padding: 20px;
+        border-radius: 4px 4px 0 0;
         display: flex;
         align-items: center;
         justify-content: space-between;
         z-index: 99;
 
         .room-name {
-            font-size: 24px;
-            margin: 0 auto;
+            font-family: "Pacifico", sans-serif;
+            color: var(--ui-white);
         }
 
         .actions {
             display: flex;
 
+            .room-participants {
+                height: 28px;
+                display: flex;
+                align-items: center;
+                background: white;
+                border-radius: 4px;
+                padding: 0 8px 0 4px;
+                margin-right: 10px;
+                cursor: pointer;
+
+                i {
+                    font-weight: 500;
+                }
+
+                span {
+                    margin: 0 4px;
+                    font-size: 14px;
+                }
+            }
+
             .action {
-                position: relative;
                 display: grid;
                 place-items: center;
                 width: 28px;

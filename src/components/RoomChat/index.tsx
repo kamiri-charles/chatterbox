@@ -16,7 +16,6 @@ const RoomChat: FC<RoomChatProps> = ({ socket, username, roomName }) => {
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 	const [inputData, setInputData] = useState<string>("");
     const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-    const [isTyping, setIsTyping] = useState(false);
     const [roomParticipants, setRoomParticipants] = useState<{socketId: string, username: string}[]>([]);
 
 	useEffect(() => {
@@ -32,20 +31,6 @@ const RoomChat: FC<RoomChatProps> = ({ socket, username, roomName }) => {
 
 			// Handle typing
 			textareaRef.current?.addEventListener("input", () => handle_typing());
-
-			// Show typing indicator when the other participant is typing
-			socket.on("typing", (data) => {
-				if (data.username !== username) {
-					setIsTyping(true);
-				}
-			});
-
-			// Hide typing indicator when the other participant stops typing
-			socket.on("stop_typing", (data) => {
-				if (data.username !== username) {
-					setIsTyping(false);
-				}
-			});
 		}
 
 		return () => {
@@ -55,10 +40,6 @@ const RoomChat: FC<RoomChatProps> = ({ socket, username, roomName }) => {
 			}
 		};
 	}, [socket]);
-
-	const handle_save = () => {
-		alert("This feature is under development!");
-	};
 
 	const get_time = (t: Date | string) => {
 		let dateObj = typeof t === "string" ? new Date(t) : t;
@@ -120,8 +101,10 @@ const RoomChat: FC<RoomChatProps> = ({ socket, username, roomName }) => {
 				<div className="room-name">{roomName}</div>
 
 				<div className="actions">
-					<div className="action save" onClick={() => handle_save()}>
-						<i className="bx bx-save"></i>
+					
+					<div className="room-participants">
+						<span>{roomParticipants.length}</span>
+						<i className="bx bx-user"></i>
 					</div>
 
 					<div className="action exit">
@@ -157,10 +140,6 @@ const RoomChat: FC<RoomChatProps> = ({ socket, username, roomName }) => {
 			</div>
 
 			<div className="input-field">
-				{/* <div className="typing-alert">
-					{isTyping && `${randomBuddyUsername} is typing...`}
-				</div> */}
-
 				<textarea
 					ref={textareaRef}
 					placeholder="Enter message"
