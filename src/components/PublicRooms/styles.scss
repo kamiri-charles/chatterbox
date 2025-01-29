@@ -35,6 +35,13 @@
         flex-direction: column;
         align-items: center;
 
+        .rooms-loader {
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
         .room {
             position: relative;
             width: 90%;

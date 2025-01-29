@@ -1,6 +1,7 @@
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { Socket } from "socket.io-client";
 import "./styles.scss";
+import { ImpulseSpinner } from "react-spinners-kit";
 
 interface PublicRoomsProps {
     socket: Socket | undefined;
@@ -38,25 +39,43 @@ const PublicRooms: FC<PublicRoomsProps> = ({socket, setServersDisplay, setPublic
   }
 
   return (
-    <div className="rooms-list component-wrapper">
-        <div className="r-list-header">
-            <div className="back" onClick={() => setServersDisplay(false)}><i className="bx bx-left-arrow-alt"></i></div>
-            <i className="bx bx-message-square"></i>
-            <span>Public Rooms</span>
-        </div>
+		<div className="rooms-list component-wrapper">
+			<div className="r-list-header">
+				<div className="back" onClick={() => setServersDisplay(false)}>
+					<i className="bx bx-left-arrow-alt"></i>
+				</div>
+				<i className="bx bx-message-square"></i>
+				<span>Public Rooms</span>
+			</div>
 
-        <div className="r-list">
-            {roomsBaseData.map((room, idx) => (
-              <div className="room" key={idx}>
-                <div className="room-name">{room.roomName}</div>
-                <div className="room-desc">{room.roomDesc}</div>
-                <div className="user-count"><i className="bx bx-user"></i> <span>{room.roomUserCount}</span></div>
-                <div className="join-room-btn" onClick={() => handle_select_room(room.roomName)}>Connect</div>
-              </div>
-            ))}
-        </div>
-    </div>
-  )
+			<div className="r-list">
+				{roomsBaseData.length > 0 ? (
+					<>
+						{roomsBaseData.map((room, idx) => (
+							<div className="room" key={idx}>
+								<div className="room-name">{room.roomName}</div>
+								<div className="room-desc">{room.roomDesc}</div>
+								<div className="user-count">
+									<i className="bx bx-user"></i>{" "}
+									<span>{room.roomUserCount}</span>
+								</div>
+								<div
+									className="join-room-btn"
+									onClick={() => handle_select_room(room.roomName)}
+								>
+									Connect
+								</div>
+							</div>
+						))}
+					</>
+				) : (
+					<div className="rooms-loader">
+						<ImpulseSpinner frontColor="#0c75a1" />
+					</div>
+				)}
+			</div>
+		</div>
+	);
 }
 
 export default PublicRooms
