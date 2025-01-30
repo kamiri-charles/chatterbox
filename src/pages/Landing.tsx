@@ -3,13 +3,13 @@ import Welcome from "../components/Welcome";
 import ChatBox from "../components/ChatBox";
 import { Socket } from "socket.io-client";
 
-interface ChatProps {
+interface LandingProps {
 	socket: Socket | undefined;
 	username: string;
 }
 
 
-const Landing: React.FC<ChatProps> = ({ socket, username }) => {
+const Landing: React.FC<LandingProps> = ({ socket, username }) => {
 	const [randomChatFound, setRandomChatFound] = useState<boolean>(false);
 	const [users, setUsers] = useState([]);
 	const [roomId, setRoomId] = useState<string>("");
