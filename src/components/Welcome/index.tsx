@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import { MetroSpinner } from "react-spinners-kit";
 import { UserType } from "../../custom_types";
 import "./styles.scss";
-import { useNavigate } from "react-router-dom";
 
 interface WelcomeProps {
 	users: UserType[];
@@ -38,7 +38,6 @@ const Welcome: React.FC<WelcomeProps> = ({
 
 				// Get the other person's username
 				const p = data.room.parties.find((x: any) => x.id != socket.id);
-				console.log(p);
 				setRandomBuddyUsername(p.username);
 				setLoading(false);
 				setRandomChatFound(true);
