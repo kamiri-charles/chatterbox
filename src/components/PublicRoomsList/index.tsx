@@ -2,10 +2,10 @@ import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
 import { Socket } from "socket.io-client";
 import "./styles.scss";
 import { ImpulseSpinner } from "react-spinners-kit";
+import { useNavigate } from "react-router-dom";
 
-interface PublicRoomsProps {
+interface PublicRoomsListProps {
     socket: Socket | undefined;
-    setServersDisplay: Dispatch<SetStateAction<boolean>>;
     setPublicRoomName: Dispatch<SetStateAction<string>>;
     setJoinedPubRoom: Dispatch<SetStateAction<boolean>>;
 }
@@ -16,8 +16,9 @@ interface RoomBaseProps {
   roomUserCount: number;
 }
 
-const PublicRooms: FC<PublicRoomsProps> = ({socket, setServersDisplay, setPublicRoomName, setJoinedPubRoom}) => {
+const PublicRoomsList: FC<PublicRoomsListProps> = ({socket, setPublicRoomName, setJoinedPubRoom}) => {
   const [roomsBaseData, setRoomsBaseData] = useState<RoomBaseProps[]>([]);
+  const nav = useNavigate();
 
   useEffect(() => {
 		if (socket) {
@@ -35,13 +36,12 @@ const PublicRooms: FC<PublicRoomsProps> = ({socket, setServersDisplay, setPublic
   const handle_select_room = (room_name: string) => {
     setPublicRoomName(room_name);
     setJoinedPubRoom(true);
-    setServersDisplay(false);
   }
 
   return (
 		<div className="rooms-list component-wrapper">
 			<div className="r-list-header">
-				<div className="back" onClick={() => setServersDisplay(false)}>
+				<div className="back" onClick={() => nav("/")}>
 					<i className="bx bx-left-arrow-alt"></i>
 				</div>
 				<i className="bx bx-message-square"></i>
@@ -78,4 +78,4 @@ const PublicRooms: FC<PublicRoomsProps> = ({socket, setServersDisplay, setPublic
 	);
 }
 
-export default PublicRooms
+export default PublicRoomsList

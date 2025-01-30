@@ -1,8 +1,9 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Socket } from "socket.io-client";
 import { MetroSpinner } from "react-spinners-kit";
 import { UserType } from "../../custom_types";
 import "./styles.scss";
+import { useNavigate } from "react-router-dom";
 
 interface WelcomeProps {
 	users: UserType[];
@@ -12,7 +13,6 @@ interface WelcomeProps {
 	setRandomChatFound: (x: boolean) => void;
 	setRoomId: (x: string) => void;
 	setRandomBuddyUsername: (x: string) => void;
-	setServersDisplay: Dispatch<SetStateAction<boolean>>;
 }
 
 const Welcome: React.FC<WelcomeProps> = ({
@@ -23,10 +23,10 @@ const Welcome: React.FC<WelcomeProps> = ({
 	setRandomChatFound,
 	setRoomId,
 	setRandomBuddyUsername,
-	setServersDisplay
 }) => {
 
 	const [socketConnected, setSocketConnected] = useState<boolean>(false);
+	const nav = useNavigate();
 
 	useEffect(() => {
 		if (socket) {
@@ -127,7 +127,7 @@ const Welcome: React.FC<WelcomeProps> = ({
 								Meet My Next Bestie
 							</button>
 
-							<button onClick={() => setServersDisplay(true)}>Public Rooms</button>
+							<button onClick={() => nav("/public-rooms")}>Public Rooms</button>
 						</div>
 					)}
 				</div>
