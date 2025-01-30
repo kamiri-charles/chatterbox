@@ -38,6 +38,7 @@ const Welcome: React.FC<WelcomeProps> = ({
 
 				// Get the other person's username
 				const p = data.room.parties.find((x: any) => x.id != socket.id);
+				console.log(p);
 				setRandomBuddyUsername(p.username);
 				setLoading(false);
 				setRandomChatFound(true);
@@ -61,7 +62,6 @@ const Welcome: React.FC<WelcomeProps> = ({
 			socket.emit("cancel_search")
 		}
 	}
-
 
 	return (
 		<div className="welcome component-wrapper">

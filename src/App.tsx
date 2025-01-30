@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Landing from "./pages/Landing";
-import "boxicons/css/boxicons.min.css";
-import "./App.scss";
 import { Socket, io } from "socket.io-client";
 import PublicRooms from "./pages/PublicRooms";
+import "boxicons/css/boxicons.min.css";
+import "./App.scss";
 
 function App() {
 	const [username, setUsername] = useState<string>("");
@@ -19,13 +19,7 @@ function App() {
 		// const newSocket = io("https://chatterbox-server-4f094ffa6ffe.herokuapp.com/");
 		setSocket(newSocket);
 
-		newSocket.on("connect", () => {
-			newSocket.emit("new_user", {
-				id: newSocket.id,
-				username: username,
-			});
-		});
-
+		// Handle username
 		let checkSavedUsername = localStorage.getItem("chatterboxSavedUsername");
 		if (checkSavedUsername) {
 			setUsername(checkSavedUsername);
@@ -38,13 +32,29 @@ function App() {
 		};
 	}, []);
 
+	// Separate effect to emit event when username is set
+	useEffect(() => {
+		if (!socket || !username) return; // Ensure socket and username exist
+
+		socket.emit("new_user", {
+			id: socket.id,
+			username: username,
+		});
+	}, [socket, username]); 
+
 	return (
 		<div className="App">
 			<Header username={username} setUsername={setUsername} />
 			<Router basename="chatterbox">
 				<Routes>
-					<Route path="/" element={<Landing socket={socket} username={username} />} />
-					<Route path="/public-rooms" element={<PublicRooms socket={socket} username={username} />} />
+					<Route
+						path="/"
+						element={<Landing socket={socket} username={username} />}
+					/>
+					<Route
+						path="/public-rooms"
+						element={<PublicRooms socket={socket} username={username} />}
+					/>
 				</Routes>
 			</Router>
 		</div>

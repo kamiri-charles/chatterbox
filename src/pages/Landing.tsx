@@ -22,7 +22,7 @@ const Landing: React.FC<LandingProps> = ({ socket, username }) => {
 				setUsers(data.users);
 			});
 		}
-	}, [username]);
+	}, []);
 
 	const get_comp = () => {
 		if (randomChatFound) {
