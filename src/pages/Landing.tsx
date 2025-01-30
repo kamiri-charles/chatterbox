@@ -50,7 +50,7 @@ const Landing: React.FC<ChatProps> = ({ socket, username }) => {
 		}
 	};
 
-	return <div className="chat">{get_comp()}</div>;
+	return <div className="landing">{get_comp()}</div>;
 };
 
 export default Landing;
