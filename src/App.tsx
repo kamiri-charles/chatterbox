@@ -40,6 +40,7 @@ function App() {
 			id: socket.id,
 			username: username,
 		});
+
 	}, [socket, username]); 
 
 	return (
