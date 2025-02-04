@@ -1,4 +1,4 @@
-import { FC, useState, useRef, useEffect } from "react";
+import { FC, useState, useRef, useEffect, Dispatch, SetStateAction } from "react";
 import { Socket } from "socket.io-client";
 import { MessageType } from "../../custom_types";
 import { v4 as uuidv4 } from "uuid";
@@ -8,10 +8,10 @@ interface RoomChatProps {
 	username: string;
 	socket: Socket | undefined;
 	roomName: string;
+	setJoinedPubRoom: Dispatch<SetStateAction<boolean>>;
 }
 
-
-const RoomChat: FC<RoomChatProps> = ({ socket, username, roomName }) => {
+const RoomChat: FC<RoomChatProps> = ({ socket, username, roomName, setJoinedPubRoom }) => {
 	const [roomMessages, setRoomMessages] = useState<MessageType[]>([]);
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 	const [inputData, setInputData] = useState<string>("");
@@ -57,6 +57,7 @@ const RoomChat: FC<RoomChatProps> = ({ socket, username, roomName }) => {
 			handle_send_message();
 		}
 	};
+
 	const handle_send_message = () => {
 		if (socket && inputData.length > 0) {
 			const msg = {
@@ -95,6 +96,13 @@ const RoomChat: FC<RoomChatProps> = ({ socket, username, roomName }) => {
 		}
 	};
 
+	const exit__pub_room = () => {
+		if (socket) {
+			socket.emit("leave_room", { username, roomName });
+			setJoinedPubRoom(false);
+		}
+	}
+
 	return (
 		<div className="room-chat component-wrapper">
 			<div className="sub-header">
@@ -107,7 +115,7 @@ const RoomChat: FC<RoomChatProps> = ({ socket, username, roomName }) => {
 						<i className="bx bx-user"></i>
 					</div>
 
-					<div className="action exit">
+					<div className="action exit" onClick={() => exit__pub_room()}>
 						<i className="bx bx-x"></i>
 					</div>
 				</div>

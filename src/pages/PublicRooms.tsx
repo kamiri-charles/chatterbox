@@ -15,7 +15,7 @@ const PublicRooms: React.FC<PublicRoomsProps> = ({ socket, username }) => {
 	return (
 		<div className="public-rooms">
 			{joinedPubRoom ? (
-				<RoomChat socket={socket} roomName={publicRoomName} username={username} />
+				<RoomChat socket={socket} roomName={publicRoomName} username={username} setJoinedPubRoom={setJoinedPubRoom} />
 			) : (
 				<PublicRoomsList
 					socket={socket}

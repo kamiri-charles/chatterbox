@@ -30,7 +30,6 @@ const Welcome: React.FC<WelcomeProps> = ({
 
 	useEffect(() => {
 		if (socket) {
-			console.log(socket.connected);
 			if (socket.connected) setSocketConnected(true);
 			else setSocketConnected(false);
 
