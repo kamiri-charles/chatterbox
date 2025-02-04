@@ -17,6 +17,7 @@ const RoomChat: FC<RoomChatProps> = ({ socket, username, roomName, setJoinedPubR
 	const [inputData, setInputData] = useState<string>("");
     const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const [roomParticipants, setRoomParticipants] = useState<{socketId: string, username: string}[]>([]);
+	const [currentlyTyping, setCurrentlyTyping] = useState<string[]>([]);
 
 	useEffect(() => {
 		if (socket) {
@@ -29,14 +30,25 @@ const RoomChat: FC<RoomChatProps> = ({ socket, username, roomName, setJoinedPubR
 
             socket.on("room_messages", (data) => setRoomMessages(data));
 
+			socket.on("pub_typing_ev", (typing_user) => {
+				if (currentlyTyping.includes(typing_user) || typing_user == username) return;
+
+				setCurrentlyTyping(prev => [...prev, typing_user]);
+			});
+
+			socket.on("pub_stop_typing_ev", (typing_user) => {
+				let new_arr = currentlyTyping.filter(x => x != typing_user);
+				setCurrentlyTyping(new_arr);
+			});
+
 			// Handle typing
 			textareaRef.current?.addEventListener("input", () => handle_typing());
 		}
 
 		return () => {
 			if (socket) {
-				socket.off("typing");
-				socket.off("stop_typing");
+				socket.off("pub_typing_ev");
+				socket.off("pub_stop_typing_ev");
 			}
 		};
 	}, [socket]);
@@ -87,14 +99,23 @@ const RoomChat: FC<RoomChatProps> = ({ socket, username, roomName, setJoinedPubR
 			// Emit 'typing' event with a debounce
 			if (socket) {
 				if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
-				socket.emit("typing", { roomName, username });
+				socket.emit("pub_typing", { username, roomName });
 
 				typingTimeoutRef.current = setTimeout(() => {
-					socket.emit("stop_typing", { roomName, username });
+					socket.emit("pub_stop_typing", { username, roomName });
 				}, 1000);
 			}
 		}
 	};
+
+	const handle_currently_typing_display = () => {
+		let x = "";
+
+		if (currentlyTyping.length >= 4) x = "Multiple users are typing...";
+		else currentlyTyping.forEach(t => x += `${t} is typing, `);
+
+		return x;
+	}
 
 	const exit__pub_room = () => {
 		if (socket) {
@@ -109,7 +130,6 @@ const RoomChat: FC<RoomChatProps> = ({ socket, username, roomName, setJoinedPubR
 				<div className="room-name">{roomName}</div>
 
 				<div className="actions">
-					
 					<div className="room-participants">
 						<span>{roomParticipants.length}</span>
 						<i className="bx bx-user"></i>
@@ -132,8 +152,7 @@ const RoomChat: FC<RoomChatProps> = ({ socket, username, roomName, setJoinedPubR
 							>
 								{msg.sender !== username ? (
 									<div className="sender">{msg.sender}</div>
-
-								): null}
+								) : null}
 								{msg.content}
 								<div className="timestamp">{get_time(msg.timestamp)}</div>
 							</div>
@@ -148,6 +167,11 @@ const RoomChat: FC<RoomChatProps> = ({ socket, username, roomName, setJoinedPubR
 			</div>
 
 			<div className="input-field">
+				{currentlyTyping.length > 0 ? (
+					<div className="typing-alert">
+						{handle_currently_typing_display()}
+					</div>
+					) : ""}
 				<textarea
 					ref={textareaRef}
 					placeholder="Enter message"

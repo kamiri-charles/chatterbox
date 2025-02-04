@@ -26,7 +26,6 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 	const [inputData, setInputData] = useState<string>("");
 	const [partnerDisconnected, setPartnerDisconnected] = useState(false);
 
-
 	useEffect(() => {
 		if (socket) {
 			socket.on("messages", (data) => setMessages(data));
@@ -122,7 +121,6 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 	const handle_save = () => {
 		alert("This feature is under development!");
 	}
-
 
 	const handle_disconnect = () => {
 		if (socket) {
