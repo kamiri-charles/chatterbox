@@ -110,13 +110,11 @@ const RoomChat: FC<RoomChatProps> = ({ socket, username, roomName, setJoinedPubR
 	};
 
 	const handle_currently_typing_display = () => {
-		let x = "";
+		if (currentlyTyping.length >= 4) return "Multiple users are typing...";
 
-		if (currentlyTyping.length >= 4) x = "Multiple users are typing...";
-		else currentlyTyping.forEach(t => x += `${t} is typing, `);
+		return currentlyTyping.map((t) => `${t} is typing`).join(", ");
+	};
 
-		return x;
-	}
 
 	const exit__pub_room = () => {
 		if (socket) {
