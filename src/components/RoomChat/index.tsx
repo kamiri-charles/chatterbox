@@ -21,24 +21,24 @@ const RoomChat: FC<RoomChatProps> = ({ socket, username, roomName, setJoinedPubR
 
 	useEffect(() => {
 		if (socket) {
+			socket.emit("join_room", { roomName, username });
 
-			socket.emit("join_room", {roomName, username});
-			
 			socket.on("room_participants", (data) => {
 				setRoomParticipants(data.participants);
-			})
+			});
 
-            socket.on("room_messages", (data) => setRoomMessages(data));
+			socket.on("room_messages", (data) => setRoomMessages(data));
 
 			socket.on("pub_typing_ev", (typing_user) => {
-				if (currentlyTyping.includes(typing_user) || typing_user == username) return;
-
-				setCurrentlyTyping(prev => [...prev, typing_user]);
+				setCurrentlyTyping((prev) => {
+					if (prev.includes(typing_user) || typing_user === username)
+						return prev;
+					return [...prev, typing_user];
+				});
 			});
 
 			socket.on("pub_stop_typing_ev", (typing_user) => {
-				let new_arr = currentlyTyping.filter(x => x != typing_user);
-				setCurrentlyTyping(new_arr);
+				setCurrentlyTyping((prev) => prev.filter((x) => x !== typing_user));
 			});
 
 			// Handle typing
@@ -51,7 +51,8 @@ const RoomChat: FC<RoomChatProps> = ({ socket, username, roomName, setJoinedPubR
 				socket.off("pub_stop_typing_ev");
 			}
 		};
-	}, [socket]);
+	}, [socket]); 
+
 
 	const get_time = (t: Date | string) => {
 		let dateObj = typeof t === "string" ? new Date(t) : t;
