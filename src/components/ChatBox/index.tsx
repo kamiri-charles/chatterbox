@@ -186,6 +186,10 @@ const ChatBox: React.FC<ChatBoxProps> = ({
 				<div className="send-btn" onClick={() => handle_send_message()}>
 					<i className="bx bx-send"></i>
 				</div>
+
+				<div className="media-btn">
+					<i className="bx bx-image"></i>
+				</div>
 			</div>
 		</div>
 	);
