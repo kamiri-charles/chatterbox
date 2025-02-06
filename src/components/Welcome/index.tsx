@@ -30,20 +30,34 @@ const Welcome: React.FC<WelcomeProps> = ({
 
 	useEffect(() => {
 		if (socket) {
-			if (socket.connected) setSocketConnected(true);
-			else setSocketConnected(false);
+			// Initial check
+			setSocketConnected(socket.connected);
+
+			// Listen for connection changes
+			const handleConnect = () => setSocketConnected(true);
+			const handleDisconnect = () => setSocketConnected(false);
+
+			socket.on("connect", handleConnect);
+			socket.on("disconnect", handleDisconnect);
 
 			socket.on("chat_found", (data) => {
 				setRoomId(data.room.roomId);
 
 				// Get the other person's username
-				const p = data.room.parties.find((x: any) => x.id != socket.id);
+				const p = data.room.parties.find((x: { id: string | undefined; }) => x.id !== socket.id);
 				setRandomBuddyUsername(p.username);
 				setLoading(false);
 				setRandomChatFound(true);
-			})
+			});
+
+			return () => {
+				socket.off("connect", handleConnect);
+				socket.off("disconnect", handleDisconnect);
+				socket.off("chat_found");
+			};
 		}
-	}, [socket, socket?.connected]);
+	}, [socket]);
+
 
 	const find_random_chat = () => {
 		setLoading(true);
