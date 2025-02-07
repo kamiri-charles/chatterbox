@@ -2,11 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import { MetroSpinner } from "react-spinners-kit";
-import { UserType } from "../../custom_types";
 import "./styles.scss";
 
 interface WelcomeProps {
-	users: UserType[];
+	userCount: number;
 	socket: Socket | undefined;
 	loading: boolean;
 	setLoading: (x: boolean) => void;
@@ -16,7 +15,7 @@ interface WelcomeProps {
 }
 
 const Welcome: React.FC<WelcomeProps> = ({
-	users,
+	userCount,
 	socket,
 	loading,
 	setLoading,
@@ -74,7 +73,7 @@ const Welcome: React.FC<WelcomeProps> = ({
 		if (socket) {
 			socket.emit("cancel_search")
 		}
-	}
+	};
 
 	return (
 		<div className="welcome component-wrapper">
@@ -82,7 +81,7 @@ const Welcome: React.FC<WelcomeProps> = ({
 				{socketConnected ? (
 					<div className="online">
 						<div className="indicator"></div>
-						<div>{users.length == 0 ? 0 : users.length - 1} online</div>
+						<div>{userCount == 0 ? 0 : userCount - 1} online</div>
 					</div>
 				) : (
 					<div className="offline">
