@@ -16,17 +16,13 @@ const RoomChat: FC<RoomChatProps> = ({ socket, username, roomName, setJoinedPubR
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 	const [inputData, setInputData] = useState<string>("");
     const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-    const [roomParticipants, setRoomParticipants] = useState<{socketId: string, username: string}[]>([]);
+    const [roomParticipants, setRoomParticipants] = useState<{username: string}[]>([]);
 	const [currentlyTyping, setCurrentlyTyping] = useState<string[]>([]);
 
 	useEffect(() => {
 		if (socket) {
 			socket.emit("join_room", { roomName, username });
-
-			socket.on("room_participants", (data) => {
-				setRoomParticipants(data.participants);
-			});
-
+			socket.on("room_participants", (data) => setRoomParticipants(data.participants));
 			socket.on("room_messages", (data) => setRoomMessages(data));
 
 			socket.on("pub_typing_ev", (typing_user) => {
