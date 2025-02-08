@@ -12,10 +12,10 @@ function App() {
 
 	useEffect(() => {
 		// Development
-		const newSocket = io("http://localhost:3001");
+		// const newSocket = io("http://localhost:3001");
 
 		// Production
-		// const newSocket = io("https://chatterbox-server-4f094ffa6ffe.herokuapp.com/");
+		const newSocket = io("https://chatterbox-server-4f094ffa6ffe.herokuapp.com/");
 		setSocket(newSocket);
 
 		// Handle username
@@ -44,7 +44,6 @@ function App() {
 
 	return (
 		<div className="App">
-			{/* <Header username={username} setUsername={setUsername} /> */}
 			<Router basename="chatterbox">
 				<Routes>
 					<Route

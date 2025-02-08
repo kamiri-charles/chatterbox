@@ -30,7 +30,7 @@ const Welcome: React.FC<WelcomeProps> = ({
 	setUsername,
 }) => {
 	const [socketConnected, setSocketConnected] = useState<boolean>(false);
-	const [changeUsernameActive, setChangeUsernameActive] = useState(true);
+	const [changeUsernameActive, setChangeUsernameActive] = useState(false);
 	const nav = useNavigate();
 
 	useEffect(() => {

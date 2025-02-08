@@ -20,8 +20,9 @@
         .close-wrapper {
             display: grid;
             place-items: center;
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
+            font-size: 16px;
             border-radius: 50%;
             background: black;
             color: white;
@@ -31,10 +32,6 @@
             position: absolute;
             top: 20px;
             right: 20px;
-
-            &:hover {
-                transform: scale(1.02);
-            }
         }
 
         .title {
