@@ -18,8 +18,9 @@
         color: white;
         text-align: center;
         border-radius: 3px;
+        visibility: hidden;
         opacity: 0;
-        transition: opacity 0.3s ease;
+        transition: opacity 0.3s ease, visibility 0.3s;
     }
 
     &.forced-hover-state {
@@ -32,6 +33,7 @@
         color: white;
 
         span {
+            visibility: visible;
             opacity: 1;
         }
     }

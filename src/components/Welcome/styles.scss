@@ -71,8 +71,6 @@
 
     }
 
-    
-
     .app-meta {
         display: flex;
         flex-direction: column;
@@ -82,11 +80,12 @@
         color: black;
 
         .logo {
-            font-size: 50px;
+            font-size: 80px;
             color: var(--ui-primary);
         }
         
         .welcome-text {
+            font-size: 18px;
             padding: 20px;
             
             .welcome-text-title {
@@ -96,6 +95,7 @@
                 color: var(--ui-primary);
                 
                 span {
+                    font-size: 30px;
                     font-weight: 400;
                     font-family: "Pacifico", cursive;
                     color: var(--ui-secondary);
