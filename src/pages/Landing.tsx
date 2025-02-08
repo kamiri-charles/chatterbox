@@ -36,6 +36,7 @@ const Landing: React.FC<LandingProps> = ({ socket, username }) => {
 		} else {
 			return (
 				<Welcome
+					username={username}
 					userCount={userCount}
 					socket={socket}
 					loading={loading}

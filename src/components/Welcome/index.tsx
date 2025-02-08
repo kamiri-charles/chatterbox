@@ -5,6 +5,7 @@ import { MetroSpinner } from "react-spinners-kit";
 import "./styles.scss";
 
 interface WelcomeProps {
+	username: string;
 	userCount: number;
 	socket: Socket | undefined;
 	loading: boolean;
@@ -15,6 +16,7 @@ interface WelcomeProps {
 }
 
 const Welcome: React.FC<WelcomeProps> = ({
+	username,
 	userCount,
 	socket,
 	loading,
@@ -23,7 +25,6 @@ const Welcome: React.FC<WelcomeProps> = ({
 	setRoomId,
 	setRandomBuddyUsername,
 }) => {
-
 	const [socketConnected, setSocketConnected] = useState<boolean>(false);
 	const nav = useNavigate();
 
@@ -43,7 +44,9 @@ const Welcome: React.FC<WelcomeProps> = ({
 				setRoomId(data.room.roomId);
 
 				// Get the other person's username
-				const p = data.room.parties.find((x: { id: string | undefined; }) => x.id !== socket.id);
+				const p = data.room.parties.find(
+					(x: { id: string | undefined }) => x.id !== socket.id
+				);
 				setRandomBuddyUsername(p.username);
 				setLoading(false);
 				setRandomChatFound(true);
@@ -56,7 +59,6 @@ const Welcome: React.FC<WelcomeProps> = ({
 			};
 		}
 	}, [socket]);
-
 
 	const find_random_chat = () => {
 		setLoading(true);
@@ -71,24 +73,49 @@ const Welcome: React.FC<WelcomeProps> = ({
 	const cancel_search = () => {
 		setLoading(false);
 		if (socket) {
-			socket.emit("cancel_search")
+			socket.emit("cancel_search");
 		}
 	};
 
 	return (
 		<div className="welcome component-wrapper">
-			<div className="users-count">
-				{socketConnected ? (
-					<div className="online">
-						<div className="indicator"></div>
-						<div>{userCount == 0 ? 0 : userCount - 1} online</div>
+			<div className="welcome-sub-header">
+				<div className="left">
+
+					<div className="users-count">
+						{socketConnected ? (
+							<div className="online">
+								<div className="indicator"></div>
+								<div>{userCount == 0 ? 0 : userCount - 1} online</div>
+							</div>
+						) : (
+							<div className="offline">
+								<div className="indicator"></div>
+								<div>Not connected</div>
+							</div>
+						)}
 					</div>
-				) : (
-					<div className="offline">
-						<div className="indicator"></div>
-						<div>Not connected</div>
+
+					<div
+						className="username" /* onClick={() => setChangeUsernameActive(true)} */
+					>
+						{username}
+						<i className="bx bx-pencil"></i>
 					</div>
-				)}
+
+				</div>
+
+				<div className="right">
+					<div className="action">
+						<i className="bx bx-sun"></i>
+					</div>
+					<div className="action">
+						<i className="bx bx-cog"></i>
+					</div>
+					<div className="action">
+						<i className="bx bx-dots-vertical-rounded"></i>
+					</div>
+				</div>
 			</div>
 
 			<div className="app-meta">
@@ -97,7 +124,9 @@ const Welcome: React.FC<WelcomeProps> = ({
 				</div>
 
 				<div className="welcome-text">
-					<div className="welcome-text-title">Welcome to <span>chatterbox.</span></div>
+					<div className="welcome-text-title">
+						Welcome to <span>chatterbox.</span>
+					</div>
 
 					<div className="welcome-text-content">
 						Dive into spontaneous conversations with people from around the
@@ -135,7 +164,10 @@ const Welcome: React.FC<WelcomeProps> = ({
 						</div>
 					) : (
 						<div className="buttons">
-							<button className="random-chat" onClick={() => find_random_chat()}>
+							<button
+								className="random-chat"
+								onClick={() => find_random_chat()}
+							>
 								Meet My Next Bestie
 							</button>
 

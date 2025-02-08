@@ -1,4 +1,55 @@
 .welcome {
+
+    .welcome-sub-header {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+
+        .left {
+            display: flex;
+            font-size: 18px;
+            gap: 20px;
+        
+            .users-count {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: black;
+
+                .online, .offline {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    
+                    .indicator {
+                        width: 10px;
+                        height: 10px;
+                        border-radius: 50%;
+                        background: #3cfd0b;
+                        margin-inline: 10px;
+                    } 
+                }
+
+                .offline .indicator {background: red};
+            }
+
+            .username {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                i {
+                    cursor: pointer;
+                    margin-inline: 4px;
+                }
+            }
+        }
+
+        .right {
+            display: flex;
+            gap: 20px;
+            font-size: 24px;
+        }
+    }
     .searching {
         display: flex;
         flex-direction: column;
@@ -23,31 +74,7 @@
 
     }
 
-    .users-count {
-        position: absolute;
-        right: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 18px;
-        color: black;
-
-        .online, .offline {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            
-            .indicator {
-                width: 10px;
-                height: 10px;
-                border-radius: 50%;
-                background: #3cfd0b;
-                margin-inline: 10px;
-            } 
-        }
-
-        .offline .indicator {background: red};
-    }
+    
 
     .app-meta {
         display: flex;
