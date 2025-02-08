@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import { MetroSpinner } from "react-spinners-kit";
 import "./styles.scss";
 import TooltipIcon from "../../utils/TooltipIcon";
+import { NewUsernameForm } from "./NewUsernameForm";
 
 interface WelcomeProps {
 	username: string;
@@ -14,6 +15,7 @@ interface WelcomeProps {
 	setRandomChatFound: (x: boolean) => void;
 	setRoomId: (x: string) => void;
 	setRandomBuddyUsername: (x: string) => void;
+	setUsername: Dispatch<SetStateAction<string>>;
 }
 
 const Welcome: React.FC<WelcomeProps> = ({
@@ -25,8 +27,10 @@ const Welcome: React.FC<WelcomeProps> = ({
 	setRandomChatFound,
 	setRoomId,
 	setRandomBuddyUsername,
+	setUsername,
 }) => {
 	const [socketConnected, setSocketConnected] = useState<boolean>(false);
+	const [changeUsernameActive, setChangeUsernameActive] = useState(true);
 	const nav = useNavigate();
 
 	useEffect(() => {
@@ -80,9 +84,9 @@ const Welcome: React.FC<WelcomeProps> = ({
 
 	return (
 		<div className="welcome component-wrapper">
+			<NewUsernameForm changeUsernameActive={changeUsernameActive} setChangeUsernameActive={setChangeUsernameActive} setUsername={setUsername} />
 			<div className="welcome-sub-header">
 				<div className="left">
-
 					<div className="users-count">
 						{socketConnected ? (
 							<div className="online">
@@ -97,14 +101,19 @@ const Welcome: React.FC<WelcomeProps> = ({
 						)}
 					</div>
 
+					
 					<div
-						className="username" /* onClick={() => setChangeUsernameActive(true)} */
+						className="username"
+						onClick={() => setChangeUsernameActive(true)}
 					>
 						{username}
-						
-						<TooltipIcon iconName="pencil" size={18} tooltipMessage="Change Username" forcedHoverState />
+						<TooltipIcon
+							iconName="pencil"
+							size={18}
+							tooltipMessage="Change Username"
+							forcedHoverState
+						/>
 					</div>
-
 				</div>
 
 				<div className="right">
@@ -115,7 +124,10 @@ const Welcome: React.FC<WelcomeProps> = ({
 						<TooltipIcon iconName="cog" tooltipMessage="Settings" />
 					</div>
 					<div className="action">
-						<TooltipIcon iconName="dots-vertical-rounded" tooltipMessage="More" />
+						<TooltipIcon
+							iconName="dots-vertical-rounded"
+							tooltipMessage="More"
+						/>
 					</div>
 				</div>
 			</div>

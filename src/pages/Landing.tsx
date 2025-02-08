@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import Welcome from "../components/Welcome";
 import ChatBox from "../components/ChatBox";
 import { Socket } from "socket.io-client";
@@ -6,9 +6,10 @@ import { Socket } from "socket.io-client";
 interface LandingProps {
 	socket: Socket | undefined;
 	username: string;
+	setUsername: Dispatch<SetStateAction<string>>;
 }
 
-const Landing: React.FC<LandingProps> = ({ socket, username }) => {
+const Landing: React.FC<LandingProps> = ({ socket, username, setUsername }) => {
 	const [randomChatFound, setRandomChatFound] = useState<boolean>(false);
 	const [userCount, setUserCount] = useState<number>(0);
 	const [roomId, setRoomId] = useState<string>("");
@@ -43,6 +44,7 @@ const Landing: React.FC<LandingProps> = ({ socket, username }) => {
 					setLoading={setLoading}
 					setRandomChatFound={setRandomChatFound}
 					setRoomId={setRoomId}
+					setUsername={setUsername}
 					setRandomBuddyUsername={setRandomBuddyUsername}
 				/>
 			);

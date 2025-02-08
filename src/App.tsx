@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Header from "./components/Header";
 import Landing from "./pages/Landing";
 import { Socket, io } from "socket.io-client";
 import PublicRooms from "./pages/PublicRooms";
@@ -50,7 +49,7 @@ function App() {
 				<Routes>
 					<Route
 						path="/"
-						element={<Landing socket={socket} username={username} />}
+						element={<Landing socket={socket} username={username} setUsername={setUsername} />}
 					/>
 					<Route
 						path="/public-rooms"

@@ -1,12 +1,13 @@
 import { useRef, useState } from "react";
+import "./NewUsernameForm.scss";
 
-interface NewUsernameProps {
+interface NewUsernameFormProps {
 	changeUsernameActive: boolean;
 	setUsername: (x: string) => void;
 	setChangeUsernameActive: (x: boolean) => void;
 }
 
-export const NewUsername: React.FC<NewUsernameProps> = ({
+export const NewUsernameForm: React.FC<NewUsernameFormProps> = ({
 	changeUsernameActive,
 	setUsername,
 	setChangeUsernameActive,
@@ -22,6 +23,8 @@ export const NewUsername: React.FC<NewUsernameProps> = ({
 			alert("Username must contain a minimum of 8 characters.");
 		} else if (inputData.length > 20) {
 			alert("Username must not contain more than 20 characters.");
+		} else if(inputData.includes(" ")) {
+			alert("Username cannot contain spaces.");
 		}
 		// Add special characters check here.
 		else {
@@ -35,7 +38,7 @@ export const NewUsername: React.FC<NewUsernameProps> = ({
 	};
 
 	return (
-		<div className={`new-username ${changeUsernameActive ? "active" : ""}`}>
+		<div className={`new-username-form ${changeUsernameActive ? "active" : ""}`}>
 
 			<div className="close-wrapper" onClick={() => setChangeUsernameActive(false)}><i className="bx bx-x"></i></div>
 			<div className="title">Change Username</div>

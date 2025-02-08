@@ -1,31 +1,8 @@
-.header {
-    width: 100vw;
-    height: 80px;
-    padding: 10px;
-    position: fixed;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 99;
-
-    background: red;
-
-    .username {
+.new-username-form {
         position: absolute;
-        right: 40px;
-        color: white;
-        cursor: pointer;
-
-        i {
-            margin-inline: 4px;
-        }
-    }
-
-    .new-username {
-        position: absolute;
-        top: -300%;
-        right: 10px;
-        background: #d4d4d4;
+        top: -50%;
+        left: 10px;
+        background: var(--ui-tertiary);
         color: black;
         display: flex;
         flex-direction: column;
@@ -34,9 +11,10 @@
         padding: 20px;
         border-radius: 10px;
         transition: all 0.3s ease;
+        z-index: 99;
         
         &.active {
-            top: 60px;
+            top: 10px;
         }
 
         .close-wrapper {
@@ -70,6 +48,7 @@
             input {
                 border: none;
                 outline: none;
+                font-size: 16px;
                 margin: 20px;
                 width: 300px;
                 padding: 10px 4px;
@@ -92,12 +71,3 @@
             padding: 10px 20px;
         }
     }
-}
-
-/* Mobile */
-@media (max-width: 768px) {
-    .header .username {
-        top: 10px;
-        right: 0;
-    }
-}
