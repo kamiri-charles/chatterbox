@@ -1,0 +1,38 @@
+.tooltip-icon {
+    position: relative;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    cursor: pointer;
+
+    span {
+        white-space: nowrap;
+        font-size: 14px;
+        padding: 0 2px;
+        position: absolute;
+        top: 105%;
+        left: 60%;
+        transform: translateX(-50%);
+        background: black;
+        color: white;
+        text-align: center;
+        border-radius: 3px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    &.forced-hover-state {
+        background: black;
+        color: white;
+    }
+
+    &:hover {
+        background: black;
+        color: white;
+
+        span {
+            opacity: 1;
+        }
+    }
+}

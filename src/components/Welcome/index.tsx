@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Socket } from "socket.io-client";
 import { MetroSpinner } from "react-spinners-kit";
 import "./styles.scss";
+import TooltipIcon from "../../utils/TooltipIcon";
 
 interface WelcomeProps {
 	username: string;
@@ -100,20 +101,21 @@ const Welcome: React.FC<WelcomeProps> = ({
 						className="username" /* onClick={() => setChangeUsernameActive(true)} */
 					>
 						{username}
-						<i className="bx bx-pencil"></i>
+						
+						<TooltipIcon iconName="pencil" size={18} tooltipMessage="Change Username" forcedHoverState />
 					</div>
 
 				</div>
 
 				<div className="right">
 					<div className="action">
-						<i className="bx bx-sun"></i>
+						<TooltipIcon iconName="sun" tooltipMessage="Dark Mode" />
 					</div>
 					<div className="action">
-						<i className="bx bx-cog"></i>
+						<TooltipIcon iconName="cog" tooltipMessage="Settings" />
 					</div>
 					<div className="action">
-						<i className="bx bx-dots-vertical-rounded"></i>
+						<TooltipIcon iconName="dots-vertical-rounded" tooltipMessage="More" />
 					</div>
 				</div>
 			</div>
