@@ -84,7 +84,7 @@ const Welcome: React.FC<WelcomeProps> = ({
 
 	return (
 		<div className="welcome component-wrapper">
-			<NewUsernameForm changeUsernameActive={changeUsernameActive} setChangeUsernameActive={setChangeUsernameActive} setUsername={setUsername} />
+			<NewUsernameForm currentUsername={username} changeUsernameActive={changeUsernameActive} setChangeUsernameActive={setChangeUsernameActive} setUsername={setUsername} />
 			<div className="welcome-sub-header">
 				<div className="left">
 					<div className="users-count">
@@ -118,7 +118,7 @@ const Welcome: React.FC<WelcomeProps> = ({
 
 				<div className="right">
 					<div className="action">
-						<TooltipIcon iconName="sun" tooltipMessage="Dark Mode" />
+						<TooltipIcon iconName="sun" tooltipMessage="Dark Mode" forcedHoverState />
 					</div>
 					<div className="action">
 						<TooltipIcon iconName="cog" tooltipMessage="Settings" />

@@ -2,12 +2,14 @@ import { useRef, useState } from "react";
 import "./NewUsernameForm.scss";
 
 interface NewUsernameFormProps {
+	currentUsername: string;
 	changeUsernameActive: boolean;
 	setUsername: (x: string) => void;
 	setChangeUsernameActive: (x: boolean) => void;
 }
 
 export const NewUsernameForm: React.FC<NewUsernameFormProps> = ({
+	currentUsername,
 	changeUsernameActive,
 	setUsername,
 	setChangeUsernameActive,
@@ -25,6 +27,8 @@ export const NewUsernameForm: React.FC<NewUsernameFormProps> = ({
 			alert("Username must not contain more than 20 characters.");
 		} else if(inputData.includes(" ")) {
 			alert("Username cannot contain spaces.");
+		} else if (inputData == currentUsername) {
+			alert("New username cannot be same as old one!")
 		}
 		// Add special characters check here.
 		else {
@@ -46,7 +50,7 @@ export const NewUsernameForm: React.FC<NewUsernameFormProps> = ({
 			<div className="field">
 				<input
 					type="text"
-					placeholder="Enter username"
+					placeholder={currentUsername}
 					value={inputData}
 					onChange={(e) => setInputData(e.target.value)}
 				/>

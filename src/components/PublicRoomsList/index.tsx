@@ -3,6 +3,7 @@ import { Socket } from "socket.io-client";
 import "./styles.scss";
 import { ImpulseSpinner } from "react-spinners-kit";
 import { useNavigate } from "react-router-dom";
+import TooltipIcon from "../../utils/TooltipIcon";
 
 interface PublicRoomsListProps {
     socket: Socket | undefined;
@@ -42,9 +43,9 @@ const PublicRoomsList: FC<PublicRoomsListProps> = ({socket, setPublicRoomName, s
 		<div className="rooms-list component-wrapper">
 			<div className="r-list-header">
 				<div className="back" onClick={() => nav("/")}>
-					<i className="bx bx-left-arrow-alt"></i>
+					<TooltipIcon iconName="left-arrow-alt" tooltipMessage="Back" size={20} forcedHoverState />
 				</div>
-				<i className="bx bx-message-square"></i>
+				<i className="bx bx-message-square" style={{fontSize: "30px", margin: "0 4px 0 18px"}}></i>
 				<span>Public Rooms</span>
 			</div>
 
